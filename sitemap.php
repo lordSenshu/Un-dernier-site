@@ -1,7 +1,7 @@
 <?php
     require "include/functions.inc.php";
     $title = "Sitemap";
-    $style = "style.css";
+    $style = "/style/style.css";
     require_once "include/header.inc.php";
 ?>
 <h1>Voici la liste complète de toutes les pages de ce site web.</h1>

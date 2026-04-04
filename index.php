@@ -1,13 +1,13 @@
 <?php
 require "include/functions.inc.php";
-$title = "TD INDEX - PHP";
-$style = "style.css";
+$title = "EcoPlein";
+$style = "/style/style.css";
 require_once "include/header.inc.php";
 ?>
 <section class="hero">
     <aside>
-        <h1>Prix des carburants (trouver un nom pour le site)</h1>
-        <p>BLAH BLAH BLAH</p>
+        <h1>EcoPlein</h1>
+        <p>Trouvez le carburant au meilleur prix, sans tourner en rond.</p>
     </aside>
     <figure>
         <img src="images/hero.webp" alt="Illustration">
@@ -29,18 +29,13 @@ require_once "include/header.inc.php";
                 <h4>fefefe</h4>
                 <p>wwvwv.</p>
             </section>
-            <section>
-                <img src="images/icons/cat.svg"/>
-                <h4>rbebeb</h4>
-                <p>wegwgwevwe</p>
-            </section>
         </div>
     </article>
     <section class="equipe">
         <h3>Equipe du site</h3>
         <div>
             <section>
-                <img src="images/SADLIAgnies.webp" alt=""/>
+                <img src="images/SADLIAgnies.png" alt=""/>
                 <p>SADLI Agnies</p>
                 <p class="role">La meuf</p>
                 <blockquote><em>""</em></blockquote>

@@ -1,0 +1,726 @@
+/* structure generale */
+
+.hex {
+    list-style-type: none;
+    padding: 0;
+}
+
+.hex li {
+    display: inline-block;
+    margin-right: 15px;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.ascii_chiffre {
+    color: red;
+}
+
+.ascii_majuscule {
+    color: green;
+}
+
+.ascii_minuscule {
+    color: blue;
+}
+
+/* Couleur du titre + lien */
+h2#titre,
+h2#titre a,
+h2#titre a:visited {
+    color: rgb(250, 189, 46);
+}
+#parseur h2,
+#parseur a,
+#parseur a:visited {
+    color: #1aa34a;
+}
+#plan h2,
+#plan a,
+#plan a:visited {
+    color: #0fa3b1;
+}
+#persistance h2,
+#persistance a,
+#persistance a:visited {
+    color: #2f5fd7;
+}
+#interface h2,
+#interface a,
+#interface a:visited {
+    color: #6a3fa0;
+}
+
+/* Couleur des numeros */
+#parseur::marker {
+    color: #1aa34a;
+}
+#plan::marker {
+    color: #0fa3b1;
+}
+#persistance::marker {
+    color: #2f5fd7;
+}
+#interface::marker {
+    color: #6a3fa0;
+}
+
+/* Couleur des titres principaux par page */
+
+h1#parseur {
+    color: #1aa34a;
+}
+
+h1#plan {
+    color: #0fa3b1;
+}
+
+h1#persistance {
+    color: #2f5fd7;
+}
+
+h1#interface {
+    color: #6a3fa0;
+}
+
+a {
+    text-decoration: none;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: rgb(29, 32, 33);
+    line-height: 1.6;
+}
+
+h1,
+h2,
+h3,
+h4,
+p,
+label,
+b,
+th,
+td,
+li {
+    color: rgb(235, 219, 178);
+}
+
+/* header */
+header {
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    margin: 5px;
+    border-radius: 8px;
+    margin-bottom: 0px;
+    background-color: rgb(22, 25, 22);
+    transition:
+        box-shadow 0.2s ease-in-out,
+        background-color 0.2s ease-in-out;
+    z-index: 100;
+}
+
+header:hover {
+    border-bottom: 0px;
+    box-shadow: 0px 6px 10px 0px rgb(0 0 0 / 20%);
+}
+
+header img {
+    height: 25pt;
+    margin-bottom: 3pt;
+    border: none;
+    border-radius: 0;
+}
+
+header h2 {
+    color: rgb(250, 189, 46);
+    font-size: 20pt;
+    margin: 0 0 0 2pt;
+    white-space: nowrap;
+    text-decoration: none;
+}
+
+/* nav */
+nav {
+    display: inline-block;
+    margin-left: 8%;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    text-align: left;
+}
+
+nav li {
+    display: inline-block;
+    margin: 0 10px;
+}
+
+nav a {
+    color: rgba(250, 189, 46, 0.75);
+    text-decoration: none;
+    font-weight: bold;
+    display: inline-block;
+    padding: 6px 10px;
+    transition: color 0.2s ease-in-out;
+}
+
+nav a:hover {
+    color: rgb(106, 180, 180);
+}
+
+nav a:active {
+    color: slategrey;
+}
+
+main {
+    margin: 0 auto;
+    padding: 5em;
+    /*max-width: 960px;*/
+    /*padding-left: 30px;*/
+    /*padding-right: 30px;*/
+}
+
+h1,
+h2 {
+    font-family:
+        "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande", "Lucida Sans",
+        Arial, sans-serif;
+    transition: color 0.2s ease-in-out;
+}
+
+/* titres */
+h1 {
+    text-align: center;
+    font-weight: bold;
+    margin: 18px 16px 10px 16px;
+}
+
+h1:hover {
+    color: rgb(61, 100, 198);
+}
+
+h2 {
+    color: rgb(250, 189, 46);
+    font-weight: bold;
+    margin: 18px 16px 10px 16px;
+}
+
+h2:hover {
+    color: rgb(69, 102, 187);
+}
+
+/* paragraphes */
+p {
+    font-family:
+        "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+    text-indent: 20px;
+    color: rgb(0, 0, 0);
+    font-size: large;
+    margin: 10px 16px;
+    text-align: justify;
+}
+
+/* liste de contenu */
+ul {
+    margin: 10px 40px;
+}
+
+/* emphase */
+strong {
+    color: rgb(164, 57, 8);
+}
+
+em {
+    font-style: italic;
+}
+
+/* images */
+figure {
+    text-align: center;
+    margin: 14px 16px;
+}
+
+figure img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 20px;
+    border: 1px lightslategray solid;
+}
+
+.mainlogo {
+    border-radius: 0;
+    border: none;
+}
+
+figcaption {
+    font-size: small;
+    font-style: italic;
+    margin-top: 6px;
+}
+
+/* tableaux */
+table {
+    width: calc(100% - 32px);
+    margin: 12px 16px;
+    border-collapse: collapse;
+}
+
+th,
+td {
+    border: 1px solid rgba(0, 0, 0, 0.35);
+    padding: 8px;
+    text-align: left;
+    vertical-align: top;
+}
+
+thead th {
+    background-color: #cdeeee;
+}
+
+/* separateur avant footer */
+hr {
+    border: none;
+    border-top: 1px solid rgba(0, 0, 0, 0.25);
+    margin: 18px 16px;
+}
+
+/* footer */
+/*footer {
+    position: relative;
+    background-color: rgb(22, 25, 22);
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-around;
+    text-align: center;
+    padding: 20px 4em;
+    padding-left: 4em;
+    padding-right: 4em;
+    font-size: small;
+}
+*/
+
+footer {
+    background-color: rgb(22, 25, 22);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 20px 4em;
+    text-align: center;
+    font-size: small;
+}
+
+footer section {
+    display: flex;
+    flex-flow: column nowrap;
+}
+
+footer section img {
+    width: 300px;
+}
+
+footer h4 {
+    font-size: 15pt;
+    margin: 0;
+    margin-bottom: 0.35em;
+    color: #9CA3AF;
+}
+
+/*footer a {
+    margin-top: 0.1em;
+    margin-bottom: 0.1em;
+    text-align: left;
+    font-size: 11pt;
+    color: #9CA3AF;
+}*/
+
+footer .links {
+    display: flex;
+    flex-direction: column;
+}
+
+footer .links a {
+    text-align: left;
+    font-size: 14pt;
+    color: #9CA3AF;
+}
+
+footer p > a {
+    color: rgba(135, 207, 235, 0.701);
+}
+
+footer address {
+    margin-top: 1.5em;
+    font-size: 11pt;
+    color: #9CA3AF;
+}
+
+/* /footer */
+
+/* hero */
+
+.hero {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    justify-content: space-evenly;
+    margin: 0;
+    background-color: rgb(29, 32, 33);
+    height: 18em;
+    padding: 3em;
+}
+
+.hero h1,
+p {
+    width: 100%;
+    text-align: center;
+}
+
+.hero h1 {
+    color: rgb(250, 189, 46);
+    font-size: 28pt;
+}
+
+.hero p {
+    color: rgb(235, 219, 178);
+    font-size: 16pt;
+}
+
+.hero > * {
+    max-width: 50%;
+}
+
+.hero figure {
+    position: relative;
+}
+
+.hero figure div {
+    position: absolute;
+    background-color: white;
+    margin-left: auto;
+    margin-right: auto;
+    height: 9em;
+    width: 100%;
+    border-radius: 50%;
+    top: 13em;
+    transform: rotateX(45deg);
+    opacity: 0.15;
+    z-index: 29;
+    transition: transform 500ms;
+}
+
+.hero img {
+    position: relative;
+    padding: 2em;
+    height: 20em;
+    box-sizing: border-box;
+    transform: rotateY(20deg) rotateZ(5deg);
+    border-radius: 5px;
+    border: none;
+    z-index: 30;
+    transition: transform 500ms;
+}
+
+.hero figure:hover img {
+    transform: translateY(-2em) rotateY(20deg) rotateZ(5deg);
+}
+
+.hero figure:hover div {
+    transform: scaleX(1.1);
+}
+
+/* /hero */
+
+main {
+    background-color: rgb(76, 70, 66);
+}
+
+/* cards */
+
+main > .cards h3,
+h4,
+p {
+    color: white;
+    text-align: center;
+}
+
+main > .cards h3 {
+    font-size: 20pt;
+    margin-top: 2em;
+    margin-bottom: 2em;
+    color: rgb(250, 189, 46);
+}
+
+main > .cards div {
+    display: flex;
+    flex-flow: row unwrap;
+    justify-content: space-between;
+}
+
+main > .cards section {
+    width: 30%;
+    margin-left: 30px;
+    margin-right: 30px;
+    padding: 20px;
+    border: 1px white solid;
+    border-radius: 10px;
+    background-color: rgb(57, 54, 52);
+}
+
+main > .cards section > img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 3.5em;
+}
+
+main > .cards section > h4 {
+    margin: 0;
+    margin-top: 0.5em;
+    margin-bottom: 1em;
+}
+
+main .cards section h4,
+p {
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* /cards */
+
+main nav {
+    width: fit-content;
+    position: relative;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+main nav ul {
+    width: inherit;
+}
+
+main nav li a {
+    font-size: 14pt;
+}
+
+/* equipe */
+
+main > .equipe h3 {
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+    width: fit-content;
+    text-align: center;
+    font-size: 20pt;
+    margin-top: 4em;
+    margin-bottom: 2em;
+    left: 1em;
+    color: rgb(250, 189, 46);
+}
+
+main > .equipe > h3::before {
+    position: absolute;
+    left: -2em;
+    width: 1.5em;
+    height: 1.5em;
+    background-image: url("images/icons/equipe.svg");
+    background-size: 1.5em;
+    content: " ";
+}
+
+main > .equipe > div {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    margin-left: auto;
+    margin-right: auto;
+    width: 70%;
+    min-width: 720px;
+}
+
+main > .equipe > div > section {
+    width: 500px;
+}
+
+main > .equipe > div > section img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 50%;
+    height: 9em;
+    width: 9em;
+    margin-bottom: 1em;
+}
+
+main > .equipe > div > section p {
+    margin: 0;
+    text-indent: 0;
+    text-align: center;
+    color: white;
+}
+
+main > .equipe > div > section .role {
+    margin-bottom: 0.5em;
+    color: rgba(235, 219, 178, 0.7);
+}
+
+main > .equipe > div > section blockquote {
+    margin: 0;
+    color: rgb(235, 219, 178);
+    text-align: center;
+}
+
+/* /equipe */
+
+.exercice {
+    padding-bottom: 0;
+    padding-top: 0;
+}
+
+.exercice > section {
+    display: block;
+    max-width: 960px;
+    background-color: rgb(57, 54, 52);
+    border-right: 1px solid lightgray;
+    border-left: 1px solid lightgray;
+    padding: 2em;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.exercice > section > h2 {
+    text-align: center;
+}
+
+.exercice footer {
+    background-color: transparent;
+    color: rgb(235, 219, 178);
+    font-size: 12pt;
+    justify-self: left;
+    padding: 3em;
+    padding-top: 0;
+    padding-left: 0;
+}
+
+.exercice blockquote {
+    background-color: rgba(235, 219, 178, 0.1);
+}
+
+.exercice blockquote p {
+    font-style: italic;
+    box-sizing: border-box;
+    padding: 2em;
+    padding-left: 0;
+    text-align: left;
+}
+
+.exercice dl,
+.exercice blockquote {
+    border-left: 2px solid rgb(235, 219, 178);
+    padding-left: 3em;
+}
+
+.exercice dt {
+    margin-bottom: 1em;
+    margin-top: 1em;
+}
+
+.exercice dd {
+    color: rgb(235, 219, 178);
+}
+
+.logo-link {
+    display: inline-block;
+    line-height: 0;
+}
+
+.side-menu {
+    position: fixed;
+    top: 110px;
+    left: 12px;
+    width: 180px;
+    background: rgba(255, 255, 255, 0.92);
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 12px;
+    padding: 10px 10px;
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.12);
+}
+
+.side-menu ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.side-menu li {
+    margin: 6px 0;
+}
+
+.side-menu a {
+    display: block;
+    padding: 6px 8px;
+    border-radius: 10px;
+}
+
+.side-menu a:hover {
+    background-color: rgba(205, 238, 238, 0.65);
+}
+
+@media (max-width: 1100px) {
+    .side-menu {
+        display: none;
+    }
+}
+
+.cards {
+    padding-left: 28px;
+}
+
+.cards > li {
+    margin: 12px 0;
+    padding: 10px 12px;
+    border: 1px solid rgba(0, 0, 0, 0.18);
+    border-radius: 14px;
+    background-color: rgba(246, 255, 254, 0.6);
+}
+
+.cards h3 {
+    margin: 8px 16px 6px 16px;
+    font-family:
+        "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande", "Lucida Sans",
+        Arial, sans-serif;
+}
+
+.cards p {
+    margin-top: 6px;
+}
+
+/* couleurs des cartes index (h3 liens) */
+#parseur h3,
+#parseur h3 a,
+#parseur h3 a:visited {
+    color: #1aa34a;
+}
+#plan h3,
+#plan h3 a,
+#plan h3 a:visited {
+    color: #0fa3b1;
+}
+#persistance h3,
+#persistance h3 a,
+#persistance h3 a:visited {
+    color: #2f5fd7;
+}
+#interface h3,
+#interface h3 a,
+#interface h3 a:visited {
+    color: #6a3fa0;
+}
