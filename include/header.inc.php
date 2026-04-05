@@ -5,13 +5,15 @@
 		<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 		<meta name="description" content ="<?=$description ?? ''?>"/>
 		<title><?= $title ?></title>
-		<link rel="icon" href=images/logo.ico/>
+		<link rel="icon" href=images/icons/logo.ico/>
 		<link rel="stylesheet" href="<?php echo $style; ?>"/>
     </head>
 
     <body>
         <header>
-    	<img src ="images/logofull.png" alt="le logo de notre site"/>
+    	<h2 class="titre"><a href="index.php">
+			<img src="images/logofull.png" alt="Logo du site">
+		</a></h2>
     	<nav aria-label="Navigation principale">
         	<ul>
                 <li><a href="index.php">Page d'acceuil </a></li>

@@ -2,7 +2,7 @@
 declare(strict_types=1);
 require "include/functions.inc.php";
 $title = "EcoPlein";
-$style = "/style/style.css";
+$style = "/style/newcss.css";
 require_once "include/header.inc.php";
 ?>
 <section class="hero">
@@ -36,16 +36,16 @@ require_once "include/header.inc.php";
 
     </section>
     <section class="equipe">
-        <h3>Equipe du site</h3>
+        <h3>A Propos Des Auteurs</h3>
         <div>
             <section>
-                <img src="images/SADLIAgnies.png" alt=""/>
+                <img src="images/equipe/SADLIAgnies.png" alt=""/>
                 <p>SADLI Agnies</p>
                 <p class="role">La meuf</p>
                 <blockquote><em>""</em></blockquote>
             </section>
             <section>
-                <img src="images/LHONOREEliott.webp" alt=""/>
+                <img src="images/equipe/LHONOREEliott.webp" alt=""/>
                 <p>L'HONORE Eliott</p>
                 <p class="role">Le bro</p>
                 <blockquote><em>"Ad astra per aspera."</em></blockquote>
