@@ -1,9 +1,12 @@
 <!DOCTYPE HTML>
-<html>
+<html lang="fr">
     <head>
 		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+		<meta name="description" content ="<?=$description ?? ''?>"/>
 		<title><?= $title ?></title>
-		<link rel="stylesheet" href="<?php echo $style; ?>">
+		<link rel="icon" href=images/logo.ico/>
+		<link rel="stylesheet" href="<?php echo $style; ?>"/>
     </head>
 
     <body>
