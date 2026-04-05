@@ -12,26 +12,27 @@ require_once "include/header.inc.php";
     </aside>
     <figure>
         <img src="images/hero.webp" alt="Illustration">
-        <div></div>
     </figure>
 </section>
 <main>
-    <p>vwvewvvev</p>
-    <article class="cards">
-        <h3>truc</h3>
-        <div>
-            <section>
-                <img src="images/icons/heart.svg"/>
-                <h4>fefef</h4>
-                <p>bla bla</p>
-            </section>
-            <section>
-                <img src="images/icons/clock-10.svg"/>
-                <h4>fefefe</h4>
-                <p>wwvwv.</p>
-            </section>
-        </div>
-    </article>
+   <section id="carte">
+        <h2> Sélectionnez votre région </h2>
+        <p>Cliquez sur votre région pour commencer la recherche.</p>
+        <figure>
+            <img src="images/regions.webp" usemap="#carte-regions" alt="Carte interactive des régions de france métropolitaine" id="carte-img" width="<?= $largeur_affichage ?>" />
+            <figcaption>Carte des régions de France</figcaption>
+        </figure>
+        
+        <map name = carte-regions>
+            <?php foreach ($regions as $region) : ?>
+            <area shape="poly"
+                coords="<?= scaleCoords($region['coords'], $ratio) ?>"
+                href="results.php?region=<?= $region['code'] ?>"
+                alt="<?= htmlspecialchars($region['nom']) ?>" />
+            <?php endforeach; ?>
+        </map>  
+
+    </section>
     <section class="equipe">
         <h3>Equipe du site</h3>
         <div>
