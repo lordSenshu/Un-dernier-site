@@ -14,9 +14,9 @@
     	<h2 id="titre"><a href="index.php">TD PHP</a></h2>
     	<nav aria-label="Navigation principale">
         	<ul>
-                <li><a href="">PLACEHOLDER1</a></li>
-                <li><a href="">PLACEHOLDER2</a></li>
-                <li><a href="">PLACEHOLDER3</a></li>
+                <li><a href="index.php">Page d'acceuil </a></li>
+                <li><a href="result.php">Prix carburant </a></li>
+                <li><a href="stats.php">Statistiques</a></li>
         	</ul>
     	</nav>
 		</header>
