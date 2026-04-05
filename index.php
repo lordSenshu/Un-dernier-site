@@ -23,7 +23,7 @@ require_once "include/header.inc.php";
             <figcaption>Carte des régions de France</figcaption>
         </figure>
         
-        <map name = carte-regions>
+        <map name = "carte-regions">
             <?php
                 foreach ($regions as $region) {
                     echo '<area shape="poly"';
