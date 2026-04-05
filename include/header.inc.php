@@ -15,7 +15,7 @@
     	<nav aria-label="Navigation principale">
         	<ul>
                 <li><a href="index.php">Page d'acceuil </a></li>
-                <li><a href="result.php">Prix carburant </a></li>
+                <li><a href="results.php">Prix carburant </a></li>
                 <li><a href="stats.php">Statistiques</a></li>
         	</ul>
     	</nav>
