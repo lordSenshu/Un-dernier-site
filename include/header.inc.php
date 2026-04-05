@@ -11,7 +11,7 @@
 
     <body>
         <header>
-    	<h2 id="titre"><a href="index.php">TD PHP</a></h2>
+    	<img src ="images/logo.png" alt="le logo de notre site"/>
     	<nav aria-label="Navigation principale">
         	<ul>
                 <li><a href="index.php">Page d'acceuil </a></li>
