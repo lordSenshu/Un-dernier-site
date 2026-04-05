@@ -41,4 +41,122 @@
         ['code' => 84, 'nom' => 'Auvergne-Rhône-Alpes',
         'coords' => '1082,399,1093,488,1086,491,1017,583,992,774,1143,795,1158,330,1110,279'],
     ];
+
+        /**
+     * Charge les départements d'une région depuis le CSV
+     * @param string $code_region Le code de la région à filtrer
+     * @return array Liste des départements [code => nom]
+     */
+
+    function getDepartements(string $code_region): array {
+        $departements = [];
+        $fichier = fopen(__DIR__ . '/../data/departements.csv', 'r');
+        
+        // saute la ligne d'en-tête
+        fgetcsv($fichier, 0, ',');
+        
+        while (($ligne = fgetcsv($fichier, 0, ',')) !== false) {
+            $code_dep = $ligne[0]; // DEP
+            $code_reg = $ligne[1]; // REG
+            $nom      = $ligne[5]; // NCCENR
+
+            if ($code_reg === $code_region) {
+                $departements[$code_dep] = $nom;
+            }
+        }
+        fclose($fichier);
+        return $departements;
+    }
+
+        /**
+     * Charge les communes d'un département depuis le CSV
+     * @param string $code_dep Le code département à filtrer (ex: '01')
+     * @return array Liste des communes [code_postal => nom]
+     */
+    function getCommunes(string $code_dep): array {
+        $communes = [];
+        $fichier = fopen(__DIR__ . '/../data/communes.csv', 'r');
+
+        // saute la ligne d'en-tête
+        fgetcsv($fichier, 0, ';');
+
+        while (($ligne = fgetcsv($fichier, 0, ';')) !== false) {
+            $code_insee = $ligne[0]; // #Code_commune_INSEE
+            $nom        = $ligne[3]; // Libellé_acheminement
+            $code_postal = $ligne[2]; // Code_postal
+
+            // les 2 premiers caractères du code INSEE = code département
+            $dep = substr($code_insee, 0, 2);
+
+            if ($dep === $code_dep) {
+                $communes[$code_postal] = $nom;
+            }
+        }
+        fclose($fichier);
+        return $communes;
+    }
+
+        /**
+     * Récupère les stations d'une ville via l'API gouvernementale (JSON)
+     * @param string $ville Nom de la ville
+     * @param string $carburant Type de carburant filtré (vide = tous)
+     * @return array Liste des stations avec leurs prix
+     */
+    function getStations(string $ville, string $carburant = ''): array {
+
+        // l'API attend la casse exacte : "Lyon" pas "LYON"
+        $ville_propre  = ucfirst(strtolower($ville));
+        $ville_encodee = urlencode($ville_propre);
+
+        $url = 'https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/'
+            . 'prix-des-carburants-en-france-flux-instantane-v2/records'
+            . '?where=ville%3D%22' . $ville_encodee . '%22'
+            . '&limit=50';
+
+        $reponse = file_get_contents($url);
+
+        if ($reponse === false) {
+            return [];
+        }
+
+        $donnees = json_decode($reponse, true);
+
+        if ($donnees === null || empty($donnees['results'])) {
+            return [];
+        }
+
+        $stations = [];
+
+        foreach ($donnees['results'] as $item) {
+
+            // construction des prix disponibles uniquement
+            $prix = [];
+            if ($item['sp95_prix']   !== null) $prix['SP95']   = $item['sp95_prix'];
+            if ($item['sp98_prix']   !== null) $prix['SP98']   = $item['sp98_prix'];
+            if ($item['gazole_prix'] !== null) $prix['Gazole'] = $item['gazole_prix'];
+            if ($item['e10_prix']    !== null) $prix['E10']    = $item['e10_prix'];
+            if ($item['gplc_prix']   !== null) $prix['GPL']    = $item['gplc_prix'];
+            if ($item['e85_prix']    !== null) $prix['E85']    = $item['e85_prix'];
+
+            // si un carburant est filtré et que la station ne l'a pas → on saute
+            if ($carburant !== '' && !isset($prix[$carburant])) {
+                continue;
+            }
+
+            // station sans aucun prix disponible → on saute
+            if (empty($prix)) {
+                continue;
+            }
+
+            $stations[] = [
+                'adresse'   => $item['adresse']              ?? '',
+                'ville'     => $item['ville']                ?? $ville,
+                'automate'  => $item['horaires_automate_24_24'] ?? 'Non',
+                'services'  => $item['services_service']     ?? [],
+                'prix'      => $prix,
+            ];
+        }
+
+        return $stations;
+    }
 ?>
