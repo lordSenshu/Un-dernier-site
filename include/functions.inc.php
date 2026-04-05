@@ -1,4 +1,6 @@
 <?php
+    declare(strict_types=1);
+
     // Largeur originale de l'image
     $largeur_originale = 2000;
     // Largeur d'affichage choisie
