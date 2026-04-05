@@ -24,12 +24,14 @@ require_once "include/header.inc.php";
         </figure>
         
         <map name = carte-regions>
-            <?php foreach ($regions as $region) : ?>
-            <area shape="poly"
-                coords="<?= scaleCoords($region['coords'], $ratio) ?>"
-                href="results.php?region=<?= $region['code'] ?>"
-                alt="<?= htmlspecialchars($region['nom']) ?>" />
-            <?php endforeach; ?>
+            <?php
+                foreach ($regions as $region) {
+                    echo '<area shape="poly"';
+                    echo ' coords="' . scaleCoords($region['coords'], $ratio) . '"';
+                    echo ' href="results.php?region=' . $region['code'] . '"';
+                    echo ' alt="' . htmlspecialchars($region['nom']) . '" />';
+                }
+            ?>
         </map>  
 
     </section>
