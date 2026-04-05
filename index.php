@@ -1,4 +1,5 @@
 <?php
+declare(stricte_type=1);
 require "include/functions.inc.php";
 $title = "EcoPlein";
 $style = "/style/style.css";
