@@ -11,7 +11,7 @@
 
     <body>
         <header>
-    	<img src ="images/logo.png" alt="le logo de notre site"/>
+    	<img src ="images/logofull.png" alt="le logo de notre site"/>
     	<nav aria-label="Navigation principale">
         	<ul>
                 <li><a href="index.php">Page d'acceuil </a></li>
