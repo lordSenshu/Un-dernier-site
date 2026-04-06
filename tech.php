@@ -1,33 +1,45 @@
 <?php
-    require "include/functions.inc.php";
-    $title = "TD INDEX - PHP";
-    $style = "/style/style.css";
-    require_once "include/header.inc.php";
+require "include/functions.inc.php";
+$title = "Page tech";
+$style = "/style/newcss.css";
+require_once "include/header.inc.php";
 
-/* récupère les informations de l'api ghibli
-   met les films dans une liste et récupère aléatoirement un des films */
+/* récupère les films depuis l'API Ghibli */
+$url = "https://ghibliapi.vercel.app/films";
+$response = @file_get_contents($url);
 
-    $url = "https://ghibliapi.vercel.app/films";
-
-    $response = file_get_contents($url);
+if ($response === false) {
+    echo "<p>Impossible de récupérer les données de l'API Ghibli.</p>";
+} else {
     $films = json_decode($response, true);
 
-    $index = array_rand($films);
-    $data = $films[$index];
+    if (is_array($films) && !empty($films)) {
+        $index = array_rand($films);
+        $data = $films[$index];
 ?>
+        <section>
+            <h1><?= htmlspecialchars($data["title"]) ?></h1>
+            <h2><?= htmlspecialchars($data["original_title"]) ?></h2>
 
-<!-- affiche le film choisi par array_rand() -->
+            <p><strong>Année de sortie :</strong> <?= htmlspecialchars($data["release_date"]) ?></p>
 
-<h1><?= $data["title"] ?></h1>
+            <figure>
+                <img src="<?= htmlspecialchars($data["image"]) ?>" width="250" alt="Affiche du film <?= htmlspecialchars($data["title"]) ?>" title="<?= htmlspecialchars($data["title"]) ?>">
+                <figcaption>Affiche du film <?= htmlspecialchars($data["title"]) ?></figcaption>
+            </figure>
 
-<p><strong>Réalisateur :</strong> <?= $data["director"] ?></p>
-<p><strong>Année :</strong> <?= $data["release_date"] ?></p>
-<p><strong>Score :</strong> <?= $data["rt_score"] ?>%</p>
+            <figure>
+                <img src="<?= htmlspecialchars($data["movie_banner"]) ?>" width="500" alt="Bannière du film <?= htmlspecialchars($data["title"]) ?>" title="<?= htmlspecialchars($data["title"]) ?>">
+                <figcaption>Bannière du film <?= htmlspecialchars($data["title"]) ?></figcaption>
+            </figure>
 
-<img src="<?= $data["image"] ?>" width="200" alt="Affiche du film">
-
-<p><?= $data["description"] ?></p>
-
+            <p><?= htmlspecialchars($data["description"]) ?></p>
+        </section>
 <?php
-        require_once "include/footer.inc.php";
+    } else {
+        echo "<p>Données JSON invalides ou vides.</p>";
+    }
+}
+
+require_once "include/footer.inc.php";
 ?>
