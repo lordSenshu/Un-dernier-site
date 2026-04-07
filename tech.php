@@ -39,7 +39,7 @@ if ($response === false) {
         </section>
 
     <?php
-    $user_ip = $_SERVER["REMOTE_ADDR"];
+    $user_ip = $_SERVER["HTTP_X_FORWARDED_FOR"];
 
     if ($user_ip === "127.0.0.1" || $user_ip === "::1") {
         $user_ip = "193.54.115.192";
