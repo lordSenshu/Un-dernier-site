@@ -1,6 +1,3 @@
-<?php
-    include_once "util.inc.php";
-?>
 <footer>
     <div class="footer-top">
         <section class="footer-links">

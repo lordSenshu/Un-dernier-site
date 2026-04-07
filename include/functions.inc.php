@@ -4,9 +4,9 @@
     define('ROOT', dirname(__DIR__));
 
     // Largeur originale de l'image
-    $largeur_originale = 2000;
+    $largeur_originale = 712;
     // Largeur d'affichage choisie
-    $largeur_affichage = 1000;
+    $largeur_affichage = 250;
     $ratio = $largeur_affichage / $largeur_originale; // = 0.5
 
     function scaleCoords(string $coords, float $ratio): string {
