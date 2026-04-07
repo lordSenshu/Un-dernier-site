@@ -7,12 +7,8 @@ require_once "include/header.inc.php";
 ?>
 <section class="hero">
     <aside>
-        <h1>EcoPlein</h1>
         <p>Trouvez le carburant au meilleur prix, sans tourner en rond.</p>
     </aside>
-    <figure>
-        <img src="images/hero.webp" alt="Illustration">
-    </figure>
 </section>
 <main>
    <section id="carte">
