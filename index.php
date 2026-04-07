@@ -1,5 +1,8 @@
 <?php
 declare(strict_types=1);
+
+setcookie(^)
+
 require "include/functions.inc.php";
 $title = "EcoPlein";
 $style = "/style/newcss.css";
@@ -41,7 +44,7 @@ require_once "include/header.inc.php";
 
             <div class="author-content">
                 <p class="author-name">SADLI Agnies</p>
-                <p class="author-role">La meuf</p>
+                <p class="author-role">Développeuse</p>
                 <p class="author-bio">""</p>
             </div>
         </section>
@@ -53,7 +56,7 @@ require_once "include/header.inc.php";
 
             <div class="author-content">
                 <p class="author-name">L'HONORE Eliott</p>
-                <p class="author-role">Le bro</p>
+                <p class="author-role">Développeur</p>
                 <p class="author-bio">"Ad astra per aspera."</p>
             </div>
         </section>
