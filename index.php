@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-setcookie(^)
+setcookie("fav_mode","light", time() -0,"/");
 
 require "include/functions.inc.php";
 $title = "EcoPlein";
