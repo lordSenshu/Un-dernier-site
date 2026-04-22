@@ -43,9 +43,9 @@ if ($ville !== '') {
         <select name="dep" id="dep">
             <option value="">-- Choisissez un département --</option>
             <?php foreach ($departements as $code => $nom) : ?>
-                <option value="<?= htmlspecialchars($code) ?>"
-                    <?= ($code === $code_dep) ? 'selected="selected"' : '' ?>>
-                    <?= htmlspecialchars($nom) ?> (<?= htmlspecialchars($code) ?>)
+                <option value="<?= htmlspecialchars((string)$code) ?>"
+                    <?= ((string)$code === $code_dep) ? 'selected="selected"' : '' ?>>
+                    <?= htmlspecialchars($nom) ?> (<?= htmlspecialchars((string) $code) ?>)
                 </option>
             <?php endforeach; ?>
         </select>
@@ -60,7 +60,7 @@ if ($ville !== '') {
             <?php foreach ($communes as $cp => $nom) : ?>
                 <option value="<?= htmlspecialchars($nom) ?>"
                     <?= ($nom === $ville) ? 'selected="selected"' : '' ?>>
-                    <?= htmlspecialchars($nom) ?> (<?= htmlspecialchars($cp) ?>)
+                    <?= htmlspecialchars($nom) ?> (<?= htmlspecialchars((string)$cp) ?>)
                 </option>
             <?php endforeach; ?>
         </select>
