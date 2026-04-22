@@ -898,3 +898,44 @@ main > .equipe > h3::before {
 #interface h3 a:visited {
     color: #7b4bb3;
 }
+.dep-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 16px;
+}
+
+.dep-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px 14px;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    border-radius: 10px;
+    background-color: #ffffff;
+    text-decoration: none;
+    min-width: 90px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.dep-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+
+.dep-btn.actif {
+    background-color: rgba(250, 189, 46, 0.18);
+    border-color: rgb(214, 153, 25);
+}
+
+.dep-num {
+    font-size: 18pt;
+    font-weight: bold;
+    color: rgb(214, 153, 25);
+}
+
+.dep-nom {
+    font-size: 9pt;
+    color: #40372e;
+    text-align: center;
+}

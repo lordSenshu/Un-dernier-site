@@ -37,20 +37,20 @@ if ($ville !== '') {
 <form method="get" action="results.php">
     <input type="hidden" name="region" value="<?= $code_region ?>" />
 
-    <?php if (!empty($departements)) : ?>
-    <section class="filtre">
-        <label for="dep">Département :</label>
-        <select name="dep" id="dep">
-            <option value="">-- Choisissez un département --</option>
-            <?php foreach ($departements as $code => $nom) : ?>
-                <option value="<?= htmlspecialchars((string)$code) ?>"
-                    <?= ((string)$code === $code_dep) ? 'selected="selected"' : '' ?>>
-                    <?= htmlspecialchars($nom) ?> (<?= htmlspecialchars((string) $code) ?>)
-                </option>
-            <?php endforeach; ?>
-        </select>
-    </section>
-    <?php endif; ?>
+        <?php if (!empty($departements)) : ?>
+        <section class="filtre">
+            <h3>Sélectionnez votre département</h3>
+            <div class="dep-buttons">
+                <?php foreach ($departements as $code => $nom) : ?>
+                    <a href="results.php?region=<?= $code_region ?>&dep=<?= htmlspecialchars((string)$code) ?>"
+                    class="dep-btn <?= ((string)$code === $code_dep ? 'actif' : '') ?>">
+                        <span class="dep-num"><?= htmlspecialchars((string)$code) ?></span>
+                        <span class="dep-nom"><?= htmlspecialchars($nom) ?></span>
+                    </a>
+                <?php endforeach; ?>
+            </div>
+        </section>
+        <?php endif; ?>
 
     <?php if (!empty($communes)) : ?>
     <section class="filtre">
@@ -60,7 +60,7 @@ if ($ville !== '') {
             <?php foreach ($communes as $cp => $nom) : ?>
                 <option value="<?= htmlspecialchars($nom) ?>"
                     <?= ($nom === $ville) ? 'selected="selected"' : '' ?>>
-                    <?= htmlspecialchars($nom) ?> (<?= htmlspecialchars((string)$cp) ?>)
+                    <?= htmlspecialchars($nom) ?> (<?= htmlspecialchars((string)                                                                                                                            $cp) ?>)
                 </option>
             <?php endforeach; ?>
         </select>

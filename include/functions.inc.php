@@ -76,24 +76,29 @@
 
 
 
-        /**
-     * Charge les communes d'un département depuis le CSV
-     * @param string $code_dep Le code département à filtrer (ex: '01')
-     * @return array Liste des communes [code_postal => nom]
-     */
-    function getCommunes(string $code_dep): array {
+       function getCommunes(string $code_dep): array {
         $communes = [];
         $fichier = fopen(ROOT . '/data/communes.csv', 'r');
 
-        // saute la ligne d'en-tête
-         fgetcsv($fichier, 0, ',', '"', '\\');
+        // saute la ligne d'en-tête (commence par '#')
+        fgetcsv($fichier, 0, ';', '"', '\\');
 
-        while (($ligne =  fgetcsv($fichier, 0, ',', '"', '\\')) !== false) {
-            $code_insee  = trim($ligne[0], '"');
-            $nom = trim($ligne[3], '"');
-            $code_postal = trim($ligne[2], '"');
+        // communes.csv : ISO-8859, séparateur ';'
+        // colonnes : [0] code INSEE, [1] nom, [2] code postal, [3] libellé acheminement
+        while (($ligne = fgetcsv($fichier, 0, ';', '"', '\\')) !== false) {
+            // ignore les lignes incomplètes
+            if (!isset($ligne[2]) || !isset($ligne[3])) continue;
+
+            $code_insee  = trim($ligne[0]);
+            $code_postal = trim($ligne[2]);
+            // libellé = colonne 3 (souvent identique au nom, meilleure casse)
+            $nom = trim($ligne[3]);
+
+            // conversion ISO-8859-1 → UTF-8 pour l'affichage HTML
+            $nom = iconv('ISO-8859-1', 'UTF-8//TRANSLIT', $nom);
 
             // les 2 premiers caractères du code INSEE = code département
+            // (fonctionne aussi pour "2A" et "2B" en Corse)
             $dep = substr($code_insee, 0, 2);
 
             if ($dep === $code_dep) {
