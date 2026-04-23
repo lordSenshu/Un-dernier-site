@@ -21,14 +21,7 @@ if ($code_dep !== '') {
     $communes = getCommunes($code_dep);
 }
 
-// TEST TEMPORAIRE
-if ($ville !== '') {
-    $stations = getStations($ville, $carburant);
-    echo '<pre>';
-    print_r($stations);
-    echo '</pre>';
-    exit;
-}
+
 ?>
 
 <main>
