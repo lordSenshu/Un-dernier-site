@@ -117,7 +117,7 @@
      * @param string $carburant Type de carburant filtré (vide = tous)
      * @return array Liste des stations avec leurs prix
      */
-    function getStations(string $ville, string $carburant = ''): array {
+   /* function getStations(string $ville, string $carburant = ''): array {
 
         // l'API attend la casse exacte : "Lyon" pas "LYON"
         $ville_propre  = ucfirst(strtolower($ville));
@@ -173,5 +173,5 @@
         }
 
         return $stations;
-    }
+    }*/
 ?>
