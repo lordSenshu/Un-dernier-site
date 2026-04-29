@@ -1,11 +1,8 @@
 <?php
 declare(strict_types=1);
 
-setcookie("fav_mode","light", time() -0,"/");
-
 require "include/functions.inc.php";
 $title = "EcoPlein";
-$style = "/style/newcss.css";
 require_once "include/header.inc.php";
 ?>
 <section class="hero">

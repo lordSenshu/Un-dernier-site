@@ -1,10 +1,9 @@
 <?php
+declare(strict_types=1);
 require "include/functions.inc.php";
 $title = "Page tech";
-$style = "/style/newcss.css";
 require_once "include/header.inc.php";
 
-/* récupère les films depuis l'API Ghibli */
 $url = "https://ghibliapi.vercel.app/films";
 $response = @file_get_contents($url);
 
@@ -39,7 +38,7 @@ if ($response === false) {
         </section>
 
     <?php
-    $user_ip = $_SERVER["HTTP_X_FORWARDED_FOR"];
+    $user_ip = $_SERVER["HTTP_X_FORWARDED_FOR"] ?? $_SERVER["REMOTE_ADDR"] ?? '';
 
     if ($user_ip === "127.0.0.1" || $user_ip === "::1") {
         $user_ip = "193.54.115.192";
@@ -54,11 +53,10 @@ if ($response === false) {
         <h2>Position géographique approximative</h2>
         <?php if ($geo_data && isset($geo_data['city'])): ?>
             <p><strong>Votre adresse IP :</strong> <?= htmlspecialchars($user_ip) ?></p>
-            <p><strong>Région :</strong> <?= htmlspecialchars($geo_data['region'] ?? "Inconnue")?></p>
-            <p><strong>Pays :</strong> <?= htmlspecialchars($geo_data['country'] ?? "Inconnu")?></p>
-            <p><strong>Ville :</strong><?= htmlspecialchars($geo_data['city'] ?? "Inconnu")?></p>
-            <p><strong>Localisation :</strong><?= htmlspecialchars($geo_data['loc'] ?? "Inconnu")?></p>
-
+            <p><strong>Région :</strong> <?= htmlspecialchars($geo_data['region'] ?? "Inconnue") ?></p>
+            <p><strong>Pays :</strong> <?= htmlspecialchars($geo_data['country'] ?? "Inconnu") ?></p>
+            <p><strong>Ville :</strong> <?= htmlspecialchars($geo_data['city'] ?? "Inconnu") ?></p>
+            <p><strong>Localisation :</strong> <?= htmlspecialchars($geo_data['loc'] ?? "Inconnu") ?></p>
         <?php else: ?>
             <p style="color: red;">Impossible de déterminer votre position géographique.</p>
         <?php endif; ?>
@@ -71,4 +69,4 @@ if ($response === false) {
 }
 
 require_once "include/footer.inc.php";
-?>|
+?>

@@ -8,13 +8,13 @@ body {
     margin: 0;
     padding: 0;
     font-family: Arial, sans-serif;
-    background-color: #f2f1ed;
+    background-color: #1d2021;
     line-height: 1.6;
-    color: #2f2a24;
+    color: #ebdbb2;
 }
 
 h1, h2, h3, h4, p, label, b, th, td, li {
-    color: #2f2a24;
+    color: #ebdbb2;
 }
 
 h1, h2 {
@@ -26,27 +26,27 @@ h1 {
     text-align: center;
     font-weight: bold;
     margin: 18px 16px 10px 16px;
-    color: #2f2a24;
+    color: #ebdbb2;
 }
 
 h1:hover {
-    color: rgb(61, 100, 198);
+    color: #83a598;
 }
 
 h2 {
-    color: rgb(214, 153, 25);
+    color: #fabd2f;
     font-weight: bold;
     margin: 18px 16px 10px 16px;
 }
 
 h2:hover {
-    color: rgb(69, 102, 187);
+    color: #83a598;
 }
 
 p {
     font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
     text-indent: 20px;
-    color: #40372e;
+    color: #d5c4a1;
     font-size: large;
     margin: 10px 16px;
     text-align: center;
@@ -57,7 +57,7 @@ ul {
 }
 
 strong {
-    color: #bc5a12;
+    color: #fe8019;
 }
 
 em {
@@ -73,15 +73,15 @@ figure img {
     max-width: 100%;
     height: auto;
     border-radius: 20px;
-    border: 1px solid rgba(0, 0, 0, 0.12);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.30);
 }
 
 figcaption {
     font-size: small;
     font-style: italic;
     margin-top: 6px;
-    color: #6a625a;
+    color: #928374;
 }
 
 /* ===== HEADER ===== */
@@ -99,14 +99,14 @@ header {
     padding: 20px;
     margin: 20px auto;
     border-radius: 8px;
-    background-color: #ffffff;
-    border: 1px solid rgba(0, 0, 0, 0.08);
+    background-color: #282625;
+    border: 1px solid rgba(255, 255, 255, 0.06);
     transition: box-shadow 0.2s ease-in-out, background-color 0.2s ease-in-out;
     z-index: 100;
 }
 
 header:hover {
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.40);
 }
 
 header img {
@@ -116,7 +116,7 @@ header img {
 }
 
 header h2 {
-    color: rgb(214, 153, 25);
+    color: #fabd2f;
     font-size: 20pt;
     margin: 0 0 0 2pt;
     white-space: nowrap;
@@ -142,7 +142,7 @@ nav li {
 }
 
 nav a {
-    color: #fc7700;
+    color: rgba(250, 189, 46, 0.85);
     font-weight: bold;
     display: inline-block;
     padding: 6px 10px;
@@ -151,12 +151,12 @@ nav a {
 }
 
 nav a:hover {
-    color: #8a6110;
-    background-color: rgba(250, 189, 46, 0.14);
+    color: #8ec07c;
+    background-color: rgba(250, 189, 46, 0.10);
 }
 
 nav a:active {
-    color: #6b7280;
+    color: #928374;
 }
 
 /* ===== CONTENU PRINCIPAL ===== */
@@ -164,14 +164,14 @@ nav a:active {
 main {
     margin: 0 auto;
     padding: 3em 5em 1.5em 5em;
-    background-color: #f2f1ed;
+    background-color: #282625;
 }
 
 /* ===== FOOTER ===== */
 
 footer {
-    background-color: #ffffff;
-    border-top: 1px solid rgba(0, 0, 0, 0.08);
+    background-color: #1a1918;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
     margin-top: 2em;
 }
 
@@ -206,37 +206,37 @@ footer {
     margin: 0;
     text-indent: 0;
     text-align: left;
-    color: #40372e;
+    color: #d5c4a1;
     font-size: 12pt;
 }
 
 .footer-brand p > a {
-    color: #fc7700;
+    color: #fe8019;
 }
 
 .footer-bottom {
     max-width: 1100px;
     margin: 0 auto;
     padding: 10px 24px 12px 24px;
-    border-top: 1px solid rgba(0, 0, 0, 0.10);
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
     display: flex;
     flex-wrap: wrap;
     gap: 0;
 }
 
 .footer-bottom a {
-    color: #6b7280;
+    color: #928374;
     font-size: 11pt;
 }
 
 .footer-bottom a:not(:last-child)::after {
     content: "|";
     margin: 0 10px;
-    color: rgba(0, 0, 0, 0.18);
+    color: rgba(255, 255, 255, 0.15);
 }
 
 .footer-bottom a:hover {
-    color: #40372e;
+    color: #d5c4a1;
 }
 
 .footer-legal {
@@ -250,16 +250,16 @@ footer {
     text-indent: 0;
     text-align: left;
     font-size: 10.5pt;
-    color: #6b7280;
+    color: #928374;
 }
 
 .footer-legal a {
-    color: #6b7280;
+    color: #928374;
     text-decoration: underline;
 }
 
 .footer-legal a:hover {
-    color: #40372e;
+    color: #d5c4a1;
 }
 
 .external-icon {
@@ -286,9 +286,9 @@ a img.external-icon {
     justify-content: space-evenly;
     margin: 0 auto;
     max-width: 550px;
-    background-color: rgba(250, 189, 46, 0.10);
-    border-top: 1px solid rgba(250, 189, 46, 0.12);
-    border-bottom: 1px solid rgba(250, 189, 46, 0.12);
+    background-color: rgba(250, 189, 46, 0.07);
+    border-top: 1px solid rgba(250, 189, 46, 0.10);
+    border-bottom: 1px solid rgba(250, 189, 46, 0.10);
     border-radius: 15px;
     height: 18em;
     padding: 3em;
@@ -301,12 +301,12 @@ a img.external-icon {
 }
 
 .hero h1 {
-    color: rgb(214, 153, 25);
+    color: #fabd2f;
     font-size: 28pt;
 }
 
 .hero p {
-    color: #4d4338;
+    color: #d5c4a1;
     font-size: 16pt;
 }
 
@@ -320,7 +320,7 @@ a img.external-icon {
 
 .hero figure div {
     position: absolute;
-    background-color: rgba(250, 189, 46, 0.35);
+    background-color: rgba(250, 189, 46, 0.20);
     margin-left: auto;
     margin-right: auto;
     height: 9em;
@@ -383,7 +383,7 @@ main > .equipe h3 {
     margin-top: 4em;
     margin-bottom: 2em;
     left: 1em;
-    color: rgb(214, 153, 25);
+    color: #fabd2f;
 }
 
 main > .equipe > h3::before {
@@ -407,7 +407,7 @@ main > .equipe > h3::before {
     gap: 10px;
     align-items: center;
     width: 320px;
-    background-color: #ffffff;
+    background-color: #32302f;
     border-radius: 10px;
     padding: 20px 0 2px 10px;
     transition: transform 0.25s ease, box-shadow 0.25s ease;
@@ -415,7 +415,7 @@ main > .equipe > h3::before {
 
 .author-card:hover {
     transform: translateY(-4px);
-    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.40);
 }
 
 .author-avatar img {
@@ -438,13 +438,13 @@ main > .equipe > h3::before {
 
 .author-role {
     margin: 4px 0;
-    color: rgba(64, 55, 46, 0.7);
+    color: rgba(213, 196, 161, 0.7);
 }
 
 .author-bio {
     margin-top: 6px;
     font-size: 11pt;
-    color: #5c5146;
+    color: #a89984;
     font-style: italic;
 }
 
@@ -462,9 +462,9 @@ main > .equipe > h3::before {
     flex-direction: column;
     align-items: center;
     padding: 10px 14px;
-    border: 1px solid rgba(0, 0, 0, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.10);
     border-radius: 10px;
-    background-color: #ffffff;
+    background-color: #32302f;
     text-decoration: none;
     min-width: 90px;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -472,31 +472,31 @@ main > .equipe > h3::before {
 
 .dep-btn:hover {
     transform: translateY(-3px);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.40);
 }
 
 .dep-btn.actif {
-    background-color: rgba(250, 189, 46, 0.18);
-    border-color: rgb(214, 153, 25);
+    background-color: rgba(250, 189, 46, 0.15);
+    border-color: #fabd2f;
 }
 
 .dep-num {
     font-size: 18pt;
     font-weight: bold;
-    color: rgb(214, 153, 25);
+    color: #fabd2f;
 }
 
 .dep-nom {
     font-size: 9pt;
-    color: #40372e;
+    color: #d5c4a1;
     text-align: center;
 }
 
 /* ===== PAGE RÉSULTATS — STATIONS ===== */
 
 .derniere-visite {
-    background: #e8f4fd;
-    border-left: 4px solid #2c7be5;
+    background: #1c2b3a;
+    border-left: 4px solid #458588;
     padding: .6rem 1rem;
     border-radius: 4px;
     margin-bottom: 1.5rem;
@@ -504,9 +504,9 @@ main > .equipe > h3::before {
 }
 
 .aucun-resultat {
-    color: #c0392b;
+    color: #fb4934;
     padding: 1rem;
-    background: #fdf0ee;
+    background: #2d1a1a;
     border-radius: 6px;
 }
 
@@ -518,16 +518,16 @@ main > .equipe > h3::before {
 }
 
 .station-card {
-    border: 1px solid #dde3ea;
+    border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 10px;
     padding: 1rem 1.2rem;
-    background: #fff;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, .06);
+    background: #32302f;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, .25);
     transition: box-shadow .2s;
 }
 
 .station-card:hover {
-    box-shadow: 0 4px 14px rgba(0, 0, 0, .12);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, .40);
 }
 
 .station-header {
@@ -541,11 +541,11 @@ main > .equipe > h3::before {
 .station-header h4 {
     margin: 0;
     font-size: .95rem;
-    color: #1a202c;
+    color: #ebdbb2;
 }
 
 .badge.automate {
-    background: #2c7be5;
+    background: #458588;
     color: #fff;
     font-size: .72rem;
     padding: .2rem .5rem;
@@ -561,7 +561,7 @@ main > .equipe > h3::before {
 }
 
 .prix-item {
-    background: #f4f7fb;
+    background: #1d2021;
     border-radius: 6px;
     padding: .4rem .7rem;
     text-align: center;
@@ -569,14 +569,14 @@ main > .equipe > h3::before {
 }
 
 .prix-item.prix-highlight {
-    background: #d0e8ff;
-    border: 1.5px solid #2c7be5;
+    background: #1c2b3a;
+    border: 1.5px solid #458588;
 }
 
 .prix-type {
     display: block;
     font-size: .72rem;
-    color: #666;
+    color: #a89984;
     font-weight: 600;
 }
 
@@ -584,13 +584,13 @@ main > .equipe > h3::before {
     display: block;
     font-size: 1rem;
     font-weight: 700;
-    color: #1a202c;
+    color: #ebdbb2;
 }
 
 .prix-maj {
     display: block;
     font-size: .65rem;
-    color: #999;
+    color: #665c54;
     margin-top: .15rem;
 }
 
@@ -604,12 +604,12 @@ main > .equipe > h3::before {
 }
 
 .stat-card {
-    background: #fff;
-    border: 1px solid #dde3ea;
+    background: #32302f;
+    border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 10px;
     padding: 1.2rem 2rem;
     text-align: center;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, .06);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, .25);
     min-width: 160px;
 }
 
@@ -617,14 +617,14 @@ main > .equipe > h3::before {
     display: block;
     font-size: 2.4rem;
     font-weight: 700;
-    color: #2c7be5;
+    color: #458588;
     line-height: 1;
 }
 
 .stat-label {
     display: block;
     font-size: .85rem;
-    color: #666;
+    color: #a89984;
     margin-top: .3rem;
 }
 
@@ -646,7 +646,7 @@ main > .equipe > h3::before {
     flex-shrink: 0;
     font-size: .88rem;
     text-align: right;
-    color: #333;
+    color: #d5c4a1;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -661,19 +661,19 @@ main > .equipe > h3::before {
 
 .barre {
     height: 28px;
-    background: #2c7be5;
+    background: #458588;
     border-radius: 0 4px 4px 0;
     min-width: 4px;
     transition: width .4s ease;
 }
 
-.barre.podium-1 { background: #f6b93b; }
-.barre.podium-2 { background: #c0c0c0; }
-.barre.podium-3 { background: #cd7f32; }
+.barre.podium-1 { background: #fabd2f; }
+.barre.podium-2 { background: #a89984; }
+.barre.podium-3 { background: #d65d0e; }
 
 .barre-valeur {
     font-size: .82rem;
-    color: #555;
+    color: #a89984;
     white-space: nowrap;
 }
 
@@ -711,7 +711,7 @@ main > .equipe > h3::before {
 }
 
 .description {
-    background-color: #f3ecda;
+    background-color: #32302f;
     padding: 20px;
     border-radius: 12px;
     margin-top: 20px;
@@ -720,7 +720,7 @@ main > .equipe > h3::before {
 /* ===== PAGE TECH — GÉOLOCALISATION ===== */
 
 .geo {
-    background-color: #f3ecda;
+    background-color: #32302f;
     padding: 20px;
     border-radius: 12px;
     margin: 20px auto 0 auto;
@@ -755,5 +755,5 @@ main > .equipe > h3::before {
 
 .geo .label {
     text-align: right;
-    color: #bc5a12;
+    color: #fe8019;
 }

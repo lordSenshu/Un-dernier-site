@@ -1,23 +1,17 @@
 <?php
-
 $cookie_name = "theme";
 $cookie_path = "/";
-
 $theme = "jour";
 
-// changement via URL
 if (isset($_GET["theme"])) {
     $t = $_GET["theme"];
-
     if ($t === "jour" || $t === "nuit") {
         $theme = $t;
-        setcookie($cookie_name, $theme, time() + 30*24*3600, $cookie_path);
+        setcookie($cookie_name, $theme, time() + 30 * 24 * 3600, $cookie_path);
     } else {
         setcookie($cookie_name, "", time() - 3600, $cookie_path);
     }
-}
-// sinon si cookie 
-elseif (isset($_COOKIE[$cookie_name])) {
+} elseif (isset($_COOKIE[$cookie_name])) {
     if ($_COOKIE[$cookie_name] === "jour" || $_COOKIE[$cookie_name] === "nuit") {
         $theme = $_COOKIE[$cookie_name];
     } else {
@@ -25,12 +19,7 @@ elseif (isset($_COOKIE[$cookie_name])) {
     }
 }
 
-// choix CSS
-if ($theme === "nuit") {
-    $style = "/style/style.css";
-} else {
-    $style = "/style/newcss.css";
-}
+$style = ($theme === "nuit") ? "/style/darkcss.css" : "/style/newcss.css";
 ?>
 
 <!DOCTYPE HTML>
@@ -38,7 +27,7 @@ if ($theme === "nuit") {
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-    <meta name="description" content ="<?=$description ?? ''?>"/>
+    <meta name="description" content="<?= $description ?? '' ?>"/>
     <title><?= $title ?></title>
     <link rel="icon" href="images/icons/logofuel.ico"/>
     <link rel="stylesheet" href="<?= $style ?>"/>
@@ -60,7 +49,6 @@ if ($theme === "nuit") {
         </ul>
     </nav>
 
-    <!-- bouton thème -->
     <div style="margin-left:auto;">
         <a href="?theme=jour">
             <img src="images/jour.png" alt="Jour" style="height:30px;">
@@ -69,5 +57,4 @@ if ($theme === "nuit") {
             <img src="images/nuit.png" alt="Nuit" style="height:30px;">
         </a>
     </div>
-
 </header>
