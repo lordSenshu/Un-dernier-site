@@ -81,7 +81,7 @@ $max_stations = 15;
     <h3>
         <?= $nb_affichees ?> / <?= $nb_total ?> station<?= $pluriel ?>
         dans le département <strong><?= htmlspecialchars($code_dep) ?></strong>
-        — données issues du flux <abbr title="eXtensible Markup Language">XML</abbr>
+        - données issues du flux XML
         <?= $carburant !== '' ? '· <strong>' . htmlspecialchars($carburant) . '</strong>' : '' ?>
     </h3>
  
@@ -102,7 +102,7 @@ $max_stations = 15;
 
             </div>
             <div class="prix-grille">
-                
+
             <?php foreach ($s['prix'] as $type => $valeur) :
                 $highlight = ($carburant === $type) ? ' prix-highlight' : '';
             ?>
@@ -120,7 +120,7 @@ $max_stations = 15;
     <?php if ($nb_total > $max_stations) : ?>
         <p class="notice">
             Seules les <?= $max_stations ?> stations les moins chères sont affichées.
-            Pour une ville précise, utilisez la <a href="index.php">recherche classique</a>.
+            <br />Pour une ville précise, utilisez la <a href="index.php">recherche classique</a>.
         </p>
     <?php endif ?>
 
