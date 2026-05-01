@@ -205,22 +205,44 @@ function getTopVilles(int $top = 10): array {
         $compteur[$ville] = ($compteur[$ville] ?? 0) + 1;
     }
     fclose($fp);
-    arsort($compteur);
-    return array_slice($compteur, 0, $top, true);
+
+    // tri décroissant
+    $nb = count($compteur);
+    $cles = array_keys($compteur);
+    for ($i = 0; $i < $nb - 1; $i++) {
+        for ($j = 0; $j < $nb - $i - 1; $j++) {
+            if ($compteur[$cles[$j]] < $compteur[$cles[$j+1]]) {
+                $tmp = $cles[$j];
+                $cles[$j] = $cles[$j+1];
+                $cles[$j+1] = $tmp;
+            }
+        }
+    }
+
+    $result = [];
+    for ($i = 0; $i < $top && $i < $nb; $i++) {
+        $result[$cles[$i]] = $compteur[$cles[$i]];
+    }
+    return $result;
 }
  
 function getTotalConsultations(): int {
     $fichier = ROOT . '/data/consultations.csv';
     if (!file_exists($fichier))
         return 0;
-    $lines = file($fichier, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-    return max(0, count($lines) - 1);
+    $fp = fopen($fichier, 'r');
+    $total = -1; // en-tête
+    while (fgets($fp) !== false) {
+        $total++;
+    }
+    fclose($fp);
+    return max(0, $total);
 }
  
 function getGeoFromIP(): array {
     $ip = $_SERVER['HTTP_X_FORWARDED_FOR'] ?? $_SERVER['REMOTE_ADDR'] ?? '';
  
-    // derrière un proxy le header peut contenir plusieurs IPs
+    //header peut contenir plusieurs IPs
     if (strpos($ip, ',') !== false) {
         $ip = trim(explode(',', $ip)[0]);
     }
@@ -257,7 +279,7 @@ function codeDepDepuisPostal(string $postal): string {
  
 /**
  * Récupère les stations d'un département via le flux KML (XML) de l'API gouvernementale.
- * On parse le XML manuellement avec preg_match_all car SimpleXML n'est pas dispo sur le serveur.
+ * On parse le XML avec preg_match_all
  * Chaque <Placemark> correspond à une station, les données sont dans des balises <SimpleData>.
  */
 function getStationsParDepXML(string $code_dep, int $limit = 50, string $carburant = ''): array {
