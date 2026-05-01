@@ -120,7 +120,7 @@ if ($ville !== '' && $code_dep !== '') {
 <?php elseif ($ville !== '' && empty($stations)) : ?>
     <p class="aucun-resultat">Aucune station trouvée pour <strong><?= htmlspecialchars($ville) ?></strong>
     <?= ($carburant !== '') ? '(carburant : ' . htmlspecialchars($carburant) . ')' : '' ?>.
-    Essayez sans filtre ou vérifiez la ville.</p>
+    <br />Essayez sans filtre ou vérifiez la ville.</p>
 
 <?php elseif (!empty($stations)) : ?>
     <section class="resultats">
