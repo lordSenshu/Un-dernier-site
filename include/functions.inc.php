@@ -121,7 +121,7 @@
             $code_postal = trim($ligne[2] ?? '');
             $nom = trim($ligne[3] ?? '');
             if ($nom === '') continue;
-            $nom = iconv('ISO-8859-1', 'UTF-8//TRANSLIT', $nom);
+            $nom = mb_convert_encoding($nom, 'UTF-8', 'ISO-8859-1');
             $dep = substr(trim($ligne[0] ?? ''), 0, 2);
             if ($dep === $code_dep) {
                 $communes[$code_postal] = $nom;
@@ -292,7 +292,7 @@
         if (!$json) return [];
         return json_decode($json, true) ?? [];
     }
-    
+
     /**
      * Déduit le code département depuis un code postal.
      *
@@ -318,13 +318,20 @@
         return $debut2;
     }
 
+
     /**
-     * Récupère les stations d'un département via le flux XML de l'API gouvernementale, parsé avec SimpleXML.
+     * Récupère les stations d'un département via le flux KML de l'API du gouvernement.
      *
-     * @param string $code_dep 
-     * @param int $limit Nombre maximum de stations à récupérer (défaut 50).
+     * Flux au format XML/KML, parsing effectué avec preg_match_all sur les balises <Placemark> (par station) et <SimpleData> (champs de données).
+     *
+     * @param string $code_dep
+     * @param int    $limit
      * @param string $carburant
-     * @return array Stations triées par prix croissant, chacune avec adresse, ville, automate, prix.
+     * @return array Stations triées par prix croissant, chacune avec les clés :
+     *               - adresse (string)
+     *               - ville (string)
+     *               - automate (bool) TRUE si ouvert 24h/24
+     *               - prix (array) [type => float]
      */
     function getStationsParDepXML(string $code_dep, int $limit = 50, string $carburant = ''): array {
         $url = 'https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/'
@@ -335,64 +342,36 @@
         $xml_raw = httpGet($url);
         if (!$xml_raw) return [];
 
-        // Retire le namespace KML pour simplifier le parsing SimpleXML
-        $xml_raw = str_replace(' xmlns="http://www.opengis.net/kml/2.2"', '', $xml_raw);
-
-        libxml_use_internal_errors(true);
-        $xml = simplexml_load_string($xml_raw);
-        if ($xml === false) {
-            file_put_contents(
-                ROOT . '/data/xml_debug.log',
-                date('Y-m-d H:i:s') . " simplexml_load_string failed\n" . substr($xml_raw, 0, 500) . "\n",
-                FILE_APPEND
-            );
-            return [];
-        }
-
-        // Structure KML : kml > Document > Placemark[] (sans Folder intermédiaire)
-        $placemarks = $xml->Document->Placemark ?? null;
-        if ($placemarks === null || count($placemarks) === 0) {
-            file_put_contents(
-                ROOT . '/data/xml_debug.log',
-                date('Y-m-d H:i:s') . " No Placemarks found. XML head: " . substr($xml_raw, 0, 500) . "\n",
-                FILE_APPEND
-            );
-            return [];
-        }
-
         $stations = [];
-        foreach ($placemarks as $placemark) {
-            // Chaque Placemark > ExtendedData > SchemaData > SimpleData[@name]
-            $data = [];
-            foreach ($placemark->ExtendedData->SchemaData->SimpleData as $sd) {
-                $name = (string)($sd->attributes()['name'] ?? '');
-                $data[$name] = (string)$sd;
-            }
+        preg_match_all('/<Placemark>(.*?)<\/Placemark>/s', $xml_raw, $blocs);
 
-            $adresse = trim($data['adresse'] ?? '');
-            $ville = trim($data['ville']   ?? '');
+        foreach ($blocs[1] as $bloc) {
+            $get = function(string $name) use ($bloc): string {
+                preg_match('/<SimpleData name="' . $name . '">(.*?)<\/SimpleData>/s', $bloc, $m);
+                return trim(html_entity_decode($m[1] ?? '', ENT_XML1 | ENT_QUOTES, 'UTF-8'));
+            };
 
             $prix = [];
-            if (!empty($data['sp95_prix'])) $prix['SP95'] = (float)$data['sp95_prix'];
-            if (!empty($data['sp98_prix'])) $prix['SP98'] = (float)$data['sp98_prix'];
-            if (!empty($data['gazole_prix'])) $prix['Gazole'] = (float)$data['gazole_prix'];
-            if (!empty($data['e10_prix'])) $prix['E10'] = (float)$data['e10_prix'];
-            if (!empty($data['gplc_prix'])) $prix['GPL'] = (float)$data['gplc_prix'];
-            if (!empty($data['e85_prix'])) $prix['E85'] = (float)$data['e85_prix'];
+            if ($v = $get('sp95_prix')) $prix['SP95'] = (float)$v;
+            if ($v = $get('sp98_prix')) $prix['SP98'] = (float)$v;
+            if ($v = $get('gazole_prix')) $prix['Gazole'] = (float)$v;
+            if ($v = $get('e10_prix')) $prix['E10'] = (float)$v;
+            if ($v = $get('gplc_prix')) $prix['GPL'] = (float)$v;
+            if ($v = $get('e85_prix')) $prix['E85'] = (float)$v;
 
             if ($carburant !== '' && !isset($prix[$carburant])) continue;
             if (empty($prix)) continue;
 
             $stations[] = [
-                'adresse' => $adresse,
-                'ville' => $ville,
-                'automate' => ($data['horaires_automate_24_24'] ?? '') === 'Oui',
+                'adresse' => $get('adresse'),
+                'ville' => $get('ville'),
+                'automate' => $get('horaires_automate_24_24') === 'Oui',
                 'prix' => $prix,
             ];
         }
 
         $cle_tri = ($carburant !== '') ? $carburant : 'Gazole';
-        usort($stations, static fn($a, $b) =>
+        usort($stations, fn($a, $b) =>
             ($a['prix'][$cle_tri] ?? PHP_INT_MAX) <=> ($b['prix'][$cle_tri] ?? PHP_INT_MAX)
         );
 
