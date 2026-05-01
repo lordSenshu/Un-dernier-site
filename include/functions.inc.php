@@ -92,8 +92,15 @@ function getCommunes(string $code_dep): array {
  * @return array stations triées par prix croissant
  */
 function getStations(string $ville, string $code_dep, string $carburant = ''): array {
-    $vn = strtoupper($ville);
- 
+
+    $vn = strtoupper(strtr($ville, [
+        'à'=>'a','â'=>'a','ä'=>'a','é'=>'e','è'=>'e','ê'=>'e','ë'=>'e',
+        'î'=>'i','ï'=>'i','ô'=>'o','ö'=>'o','ù'=>'u','û'=>'u','ü'=>'u','ç'=>'c',
+        'À'=>'A','Â'=>'A','Ä'=>'A','É'=>'E','È'=>'E','Ê'=>'E','Ë'=>'E',
+        'Î'=>'I','Ï'=>'I','Ô'=>'O','Ö'=>'O','Ù'=>'U','Û'=>'U','Ü'=>'U','Ç'=>'C',
+        '-'=>' ','\''=>' ',
+    ])); 
+
     $url_base = 'https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/'
         . 'prix-des-carburants-en-france-flux-instantane-v2/records'
         . '?where=' . urlencode('code_departement="' . $code_dep . '"')
@@ -126,7 +133,14 @@ function getStations(string $ville, string $code_dep, string $carburant = ''): a
  
     $stations = [];
     foreach ($result as $item) {
-        if (strtoupper($item['ville'] ?? '') !== $vn)
+        $v_api = strtoupper(strtr($item['ville'] ?? '', [
+            'à'=>'a','â'=>'a','ä'=>'a','é'=>'e','è'=>'e','ê'=>'e','ë'=>'e',
+            'î'=>'i','ï'=>'i','ô'=>'o','ö'=>'o','ù'=>'u','û'=>'u','ü'=>'u','ç'=>'c',
+            'À'=>'A','Â'=>'A','Ä'=>'A','É'=>'E','È'=>'E','Ê'=>'E','Ë'=>'E',
+            'Î'=>'I','Ï'=>'I','Ô'=>'O','Ö'=>'O','Ù'=>'U','Û'=>'U','Ü'=>'U','Ç'=>'C',
+            '-'=>' ','\''=>' ',
+        ]));
+        if ($v_api !== $vn)
             continue;
  
         $prix = [];

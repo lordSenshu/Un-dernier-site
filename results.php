@@ -132,25 +132,32 @@ if ($ville !== '' && $code_dep !== '') {
         </h3>
 
         <div class="stations-liste">
+
         <?php foreach ($stations as $s) : ?>
             <article class="station-card">
                 <div class="station-header">
                     <h4><?= htmlspecialchars($s['adresse']) ?></h4>
+
                     <?php if ($s['automate']) : ?>
                         <span class="badge automate">24h/24</span>
                     <?php endif; ?>
+
                 </div>
                 <div class="prix-grille">
+
                 <?php foreach ($s['prix'] as $type => $valeur) : ?>
                     <div class="prix-item <?= ($carburant === $type) ? 'prix-highlight' : '' ?>">
                         <span class="prix-type"><?= htmlspecialchars($type) ?></span>
                         <span class="prix-valeur"><?= number_format($valeur, 3, ',', '') ?> €/L</span>
+
                         <?php if (isset($s['maj'][$type])) : ?>
                             <span class="prix-maj">màj <?= htmlspecialchars($s['maj'][$type]) ?></span>
                         <?php endif; ?>
+                        
                     </div>
                 <?php endforeach; ?>
                 </div>
+
             </article>
         <?php endforeach; ?>
         </div>
