@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 require "include/functions.inc.php";
-$title       = "Plan du site";
+$title = "Plan du site";
 $description = "Structure et navigation du site EcoPlein";
 require_once "include/header.inc.php";
 ?>

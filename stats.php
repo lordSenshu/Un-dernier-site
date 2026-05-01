@@ -4,8 +4,8 @@ require "include/functions.inc.php";
 $title = "Statistiques";
 require_once "include/header.inc.php";
 
-$top_villes   = getTopVilles(10);
-$total        = getTotalConsultations();
+$top_villes = getTopVilles(10);
+$total = getTotalConsultations();
 $max_consulte = !empty($top_villes) ? max($top_villes) : 1;
 ?>
 

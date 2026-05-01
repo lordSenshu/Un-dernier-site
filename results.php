@@ -4,19 +4,19 @@ require "include/functions.inc.php";
 $title = "Résultats";
 require_once "include/header.inc.php";
 
-$code_region = isset($_GET['region'])    ? htmlspecialchars($_GET['region'])    : '';
-$code_dep    = isset($_GET['dep'])       ? htmlspecialchars($_GET['dep'])       : '';
-$ville       = isset($_GET['ville'])     ? htmlspecialchars($_GET['ville'])     : '';
-$carburant   = isset($_GET['carburant']) ? htmlspecialchars($_GET['carburant']) : '';
+$code_region = isset($_GET['region']) ? htmlspecialchars($_GET['region']) : '';
+$code_dep = isset($_GET['dep']) ? htmlspecialchars($_GET['dep']) : '';
+$ville = isset($_GET['ville']) ? htmlspecialchars($_GET['ville']) : '';
+$carburant = isset($_GET['carburant']) ? htmlspecialchars($_GET['carburant']) : '';
 
 $departements = [];
-$communes     = [];
-$stations     = [];
+$communes = [];
+$stations = [];
 
 if ($code_region !== '') $departements = getDepartements($code_region);
-if ($code_dep    !== '') $communes     = getCommunes($code_dep);
+if ($code_dep !== '') $communes = getCommunes($code_dep);
 
-$cookie_ville    = 'ecoplein_derniere_ville';
+$cookie_ville = 'ecoplein_derniere_ville';
 $cookie_path_app = '/';
 
 $derniere_ville = '';
@@ -35,11 +35,11 @@ if ($ville !== '' && $code_dep !== '') {
     logVille($ville, $code_dep, $carburant);
 
     $cookie_data = json_encode([
-        'ville'     => $ville,
-        'dep'       => $code_dep,
-        'region'    => $code_region,
+        'ville' => $ville,
+        'dep' => $code_dep,
+        'region' => $code_region,
         'carburant' => $carburant,
-        'date'      => date('d/m/Y H:i'),
+        'date' => date('d/m/Y H:i'),
     ]);
     setcookie($cookie_ville, $cookie_data, time() + 30 * 24 * 3600, $cookie_path_app);
 }
@@ -62,7 +62,7 @@ if ($ville !== '' && $code_dep !== '') {
 
 <form method="get" action="results.php">
     <input type="hidden" name="region" value="<?= $code_region ?>" />
-    <input type="hidden" name="dep"    value="<?= $code_dep ?>" />
+    <input type="hidden" name="dep" value="<?= $code_dep ?>" />
 
     <?php if (!empty($departements)) : ?>
     <section class="filtre">
@@ -97,12 +97,12 @@ if ($ville !== '' && $code_dep !== '') {
         <label for="carburant">Carburant :</label>
         <select name="carburant" id="carburant">
             <option value="">-- Tous --</option>
-            <option value="SP95"   <?= ($carburant === 'SP95')   ? 'selected="selected"' : '' ?>>SP95</option>
-            <option value="SP98"   <?= ($carburant === 'SP98')   ? 'selected="selected"' : '' ?>>SP98</option>
+            <option value="SP95" <?= ($carburant === 'SP95') ? 'selected="selected"' : '' ?>>SP95</option>
+            <option value="SP98" <?= ($carburant === 'SP98')  ? 'selected="selected"' : '' ?>>SP98</option>
             <option value="Gazole" <?= ($carburant === 'Gazole') ? 'selected="selected"' : '' ?>>Gazole</option>
-            <option value="E10"    <?= ($carburant === 'E10')    ? 'selected="selected"' : '' ?>>E10</option>
-            <option value="GPL"    <?= ($carburant === 'GPL')    ? 'selected="selected"' : '' ?>>GPL</option>
-            <option value="E85"    <?= ($carburant === 'E85')    ? 'selected="selected"' : '' ?>>E85</option>
+            <option value="E10" <?= ($carburant === 'E10') ? 'selected="selected"' : '' ?>>E10</option>
+            <option value="GPL" <?= ($carburant === 'GPL') ? 'selected="selected"' : '' ?>>GPL</option>
+            <option value="E85" <?= ($carburant === 'E85') ? 'selected="selected"' : '' ?>>E85</option>
         </select>
     </section>
     <?php endif; ?>
@@ -137,7 +137,7 @@ if ($ville !== '' && $code_dep !== '') {
                 <div class="station-header">
                     <h4><?= htmlspecialchars($s['adresse']) ?></h4>
                     <?php if ($s['automate']) : ?>
-                        <span class="badge automate">⏰ 24h/24</span>
+                        <span class="badge automate">24h/24</span>
                     <?php endif; ?>
                 </div>
                 <div class="prix-grille">

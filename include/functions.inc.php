@@ -9,9 +9,9 @@
 
     /**
      * Met à l'échelle les coordonnées d'une zone cliquable
-     * @param string $coords Coordonnées brutes séparées par des virgules
-     * @param float  $ratio  Facteur d'échelle à appliquer
-     * @return string        Coordonnées mises à l'échelle
+     * @param string $coords Coordonnées séparées par des virgules
+     * @param float $ratio Facteur d'échelle à appliquer
+     * @return string Coordonnées mises à l'échelle
      */
     function scaleCoords(string $coords, float $ratio): string {
         $points = explode(',', $coords);
@@ -49,24 +49,24 @@
     ];
 
     /**
-     * Effectue une requête HTTP GET avec curl (fallback file_get_contents)
-     * @param string $url URL à appeler
-     * @return string|false Corps de la réponse, ou false en cas d'échec
+     * Effectue une requête HTTP GET avec curl
+     * @param string $url
+     * @return string|false réponse ou false en cas d'échec
      */
     function httpGet(string $url): string|false {
         if (function_exists('curl_init')) {
             $ch = curl_init($url);
             curl_setopt_array($ch, [
                 CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_TIMEOUT        => 15,
+                CURLOPT_TIMEOUT => 15,
                 CURLOPT_FOLLOWLOCATION => true,
-                CURLOPT_USERAGENT      => 'EcoPlein/1.0',
+                CURLOPT_USERAGENT => 'EcoPlein/1.0',
                 CURLOPT_SSL_VERIFYPEER => false,
                 CURLOPT_SSL_VERIFYHOST => false,
-                CURLOPT_ENCODING       => '',
+                CURLOPT_ENCODING => '',
             ]);
             $reponse = curl_exec($ch);
-            $erreur  = curl_errno($ch);
+            $erreur = curl_errno($ch);
             curl_close($ch);
             if ($erreur === 0 && $reponse !== false && $reponse !== '') {
                 return $reponse;
@@ -75,7 +75,7 @@
 
         $contexte = stream_context_create([
             'http' => ['timeout' => 15, 'user_agent' => 'EcoPlein/1.0', 'header' => 'Accept-Encoding: gzip'],
-            'ssl'  => ['verify_peer' => false, 'verify_peer_name' => false],
+            'ssl' => ['verify_peer' => false, 'verify_peer_name' => false],
         ]);
         $raw = @file_get_contents($url, false, $contexte);
         if ($raw === false) return false;
@@ -86,8 +86,8 @@
     }
 
     /**
-     * Charge les départements d'une région depuis le CSV
-     * @param string $code_region Code de la région
+     * Charge les départements d'une région depuis le .csv
+     * @param string $code_region
      * @return array Liste [code_dep => nom]
      */
     function getDepartements(string $code_region): array {
@@ -98,7 +98,7 @@
             if (!isset($ligne[0], $ligne[1], $ligne[5])) continue;
             $code_dep = trim($ligne[0] ?? '', '"');
             $code_reg = trim($ligne[1] ?? '', '"');
-            $nom      = trim($ligne[5] ?? '', '"');
+            $nom = trim($ligne[5] ?? '', '"');
             if ($code_reg === $code_region) {
                 $departements[$code_dep] = $nom;
             }
@@ -108,8 +108,8 @@
     }
 
     /**
-     * Charge les communes d'un département depuis le CSV
-     * @param string $code_dep Code du département (ex. "75", "2A")
+     * Charge les communes d'un département depuis le .csv
+     * @param string $code_dep
      * @return array Liste [code_postal => nom_commune]
      */
     function getCommunes(string $code_dep): array {
@@ -119,7 +119,7 @@
         while (($ligne = fgetcsv($fichier, 0, ';', '"', '\\')) !== false) {
             if (!isset($ligne[0], $ligne[2], $ligne[3])) continue;
             $code_postal = trim($ligne[2] ?? '');
-            $nom         = trim($ligne[3] ?? '');
+            $nom = trim($ligne[3] ?? '');
             if ($nom === '') continue;
             $nom = iconv('ISO-8859-1', 'UTF-8//TRANSLIT', $nom);
             $dep = substr(trim($ligne[0] ?? ''), 0, 2);
@@ -133,10 +133,10 @@
 
     /**
      * Retourne les stations d'une ville via l'API gouvernementale des carburants
-     * @param string $ville     Nom de la ville (format CSV : majuscules sans accents)
-     * @param string $code_dep  Code du département (ex. "78", "2A")
-     * @param string $carburant Carburant filtré — 'SP95', 'SP98', 'Gazole', 'E10', 'GPL', 'E85' (vide = tous)
-     * @return array            Stations triées par prix croissant, chacune avec 'adresse', 'automate', 'prix', 'maj'
+     * @param string $ville Nom ville (majuscules sans accents)
+     * @param string $code_dep
+     * @param string $carburant (SP95, SP98, Gazole, E10, GPL, E85, si vide alors tous)
+     * @return array Stations triées par prix croissant
      */
     function getStations(string $ville, string $code_dep, string $carburant = ''): array {
         $normalise = function(string $s): string {
@@ -182,12 +182,12 @@
             if ($normalise($item['ville'] ?? '') !== $ville_normalisee) continue;
 
             $prix = [];
-            if (!empty($item['sp95_prix']))   $prix['SP95']   = (float)$item['sp95_prix'];
-            if (!empty($item['sp98_prix']))   $prix['SP98']   = (float)$item['sp98_prix'];
+            if (!empty($item['sp95_prix'])) $prix['SP95'] = (float)$item['sp95_prix'];
+            if (!empty($item['sp98_prix'])) $prix['SP98'] = (float)$item['sp98_prix'];
             if (!empty($item['gazole_prix'])) $prix['Gazole'] = (float)$item['gazole_prix'];
-            if (!empty($item['e10_prix']))    $prix['E10']    = (float)$item['e10_prix'];
-            if (!empty($item['gplc_prix']))   $prix['GPL']    = (float)$item['gplc_prix'];
-            if (!empty($item['e85_prix']))    $prix['E85']    = (float)$item['e85_prix'];
+            if (!empty($item['e10_prix'])) $prix['E10'] = (float)$item['e10_prix'];
+            if (!empty($item['gplc_prix'])) $prix['GPL'] = (float)$item['gplc_prix'];
+            if (!empty($item['e85_prix'])) $prix['E85'] = (float)$item['e85_prix'];
 
             if ($carburant !== '' && !isset($prix[$carburant])) continue;
             if (empty($prix)) continue;
@@ -198,11 +198,11 @@
             }
 
             $stations[] = [
-                'adresse'  => $item['adresse'] ?? '',
-                'ville'    => $item['ville']   ?? $ville,
+                'adresse' => $item['adresse'] ?? '',
+                'ville' => $item['ville'] ?? $ville,
                 'automate' => ($item['horaires_automate_24_24'] ?? '') === 'Oui',
-                'prix'     => $prix,
-                'maj'      => $maj,
+                'prix' => $prix,
+                'maj' => $maj,
             ];
         }
 
@@ -217,10 +217,10 @@
     }
 
     /**
-     * Enregistre une consultation de ville dans le fichier CSV de log
-     * @param string $ville     Nom de la ville consultée
-     * @param string $code_dep  Code du département
-     * @param string $carburant Carburant recherché (vide = tous)
+     * Enregistre une consultation fichier consultations.csv 
+     * @param string $ville
+     * @param string $code_dep
+     * @param string $carburant
      * @return void
      */
     function logVille(string $ville, string $code_dep, string $carburant = ''): void {
@@ -240,9 +240,9 @@
     }
 
     /**
-     * Retourne les N villes les plus consultées d'après le CSV de log
+     * Retourne les villes les plus consultées d'après consultations.csv
      * @param int $top Nombre de villes à retourner
-     * @return array   Tableau associatif [ville => nombre] trié décroissant
+     * @return array Tableau [ville => nombre] trié décroissant
      */
     function getTopVilles(int $top = 10): array {
         $fichier = ROOT . '/data/consultations.csv';
@@ -272,29 +272,34 @@
         return max(0, count($lines) - 1);
     }
 
-        /**
+    /**
      * Retourne la géolocalisation approximative de l'utilisateur via ipinfo.io.
      *
-     * @return array Tableau avec les clés 'ip', 'city', 'region', 'country', 'postal', 'loc'.
-     *               Tableau vide si l'appel échoue.
+     * @return array Tableau avec les clés ip, city, region, country, postal, loc, vide si l'appel échoue.
      */
     function getGeoFromIP(): array {
         $ip = $_SERVER['HTTP_X_FORWARDED_FOR'] ?? $_SERVER['REMOTE_ADDR'] ?? '';
-        if ($ip === '127.0.0.1' || $ip === '::1' || $ip === '') {
-            $ip = '193.54.115.192'; // fallback CY Cergy en local
+
+        if (str_contains($ip, ',')) {
+            $ip = trim(explode(',', $ip)[0]);
         }
-        $json = httpGet("https://ipinfo.io/{$ip}/geo");
+
+        if ($ip === '' || $ip === '127.0.0.1' || $ip === '::1') {
+            return [];
+        }
+
+        $json = @file_get_contents("https://ipinfo.io/{$ip}/geo");
         if (!$json) return [];
         return json_decode($json, true) ?? [];
     }
-
+    
     /**
-     * Déduit le code département depuis un code postal français.
+     * Déduit le code département depuis un code postal.
      *
      * Gère les cas particuliers : Corse (2A/2B) et DOM (971-976).
      *
-     * @param string $postal Code postal (ex. "76600", "20000", "97100").
-     * @return string         Code département (ex. "76", "2A", "971") ou "" si invalide.
+     * @param string $postal
+     * @return string Code département (ex. "76", "2A", "971"), "" si invalide.
      */
     function codeDepDepuisPostal(string $postal): string {
         $postal = trim($postal);
@@ -307,23 +312,19 @@
 
         $debut2 = substr($postal, 0, 2);
         if ($debut2 === '20') {
-            return '2A'; // on ne peut pas distinguer 2A/2B depuis le CP seul
+            return '2A';
         }
 
         return $debut2;
     }
 
     /**
-     * Récupère les stations d'un département via le flux XML de l'API gouvernementale
-     * (data.economie.gouv.fr), parsé avec SimpleXML.
+     * Récupère les stations d'un département via le flux XML de l'API gouvernementale, parsé avec SimpleXML.
      *
-     * Illustre l'exploitation du format XML en complément des appels JSON de getStations().
-     *
-     * @param string $code_dep  Code du département (ex. "76", "2A").
-     * @param int    $limit     Nombre maximum de stations à récupérer (défaut 50).
-     * @param string $carburant Filtre optionnel (ex. "SP95", "Gazole"). Vide = tous.
-     * @return array            Stations triées par prix croissant,
-     *                          chacune avec 'adresse', 'ville', 'automate', 'prix'.
+     * @param string $code_dep 
+     * @param int $limit Nombre maximum de stations à récupérer (défaut 50).
+     * @param string $carburant
+     * @return array Stations triées par prix croissant, chacune avec adresse, ville, automate, prix.
      */
     function getStationsParDepXML(string $code_dep, int $limit = 50, string $carburant = ''): array {
         $url = 'https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/'
@@ -364,29 +365,29 @@
             // Chaque Placemark > ExtendedData > SchemaData > SimpleData[@name]
             $data = [];
             foreach ($placemark->ExtendedData->SchemaData->SimpleData as $sd) {
-                $name        = (string)($sd->attributes()['name'] ?? '');
+                $name = (string)($sd->attributes()['name'] ?? '');
                 $data[$name] = (string)$sd;
             }
 
             $adresse = trim($data['adresse'] ?? '');
-            $ville   = trim($data['ville']   ?? '');
+            $ville = trim($data['ville']   ?? '');
 
             $prix = [];
-            if (!empty($data['sp95_prix']))   $prix['SP95']   = (float)$data['sp95_prix'];
-            if (!empty($data['sp98_prix']))   $prix['SP98']   = (float)$data['sp98_prix'];
+            if (!empty($data['sp95_prix'])) $prix['SP95'] = (float)$data['sp95_prix'];
+            if (!empty($data['sp98_prix'])) $prix['SP98'] = (float)$data['sp98_prix'];
             if (!empty($data['gazole_prix'])) $prix['Gazole'] = (float)$data['gazole_prix'];
-            if (!empty($data['e10_prix']))    $prix['E10']    = (float)$data['e10_prix'];
-            if (!empty($data['gplc_prix']))   $prix['GPL']    = (float)$data['gplc_prix'];
-            if (!empty($data['e85_prix']))    $prix['E85']    = (float)$data['e85_prix'];
+            if (!empty($data['e10_prix'])) $prix['E10'] = (float)$data['e10_prix'];
+            if (!empty($data['gplc_prix'])) $prix['GPL'] = (float)$data['gplc_prix'];
+            if (!empty($data['e85_prix'])) $prix['E85'] = (float)$data['e85_prix'];
 
             if ($carburant !== '' && !isset($prix[$carburant])) continue;
             if (empty($prix)) continue;
 
             $stations[] = [
-                'adresse'  => $adresse,
-                'ville'    => $ville,
+                'adresse' => $adresse,
+                'ville' => $ville,
                 'automate' => ($data['horaires_automate_24_24'] ?? '') === 'Oui',
-                'prix'     => $prix,
+                'prix' => $prix,
             ];
         }
 

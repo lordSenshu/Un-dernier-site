@@ -1,4 +1,4 @@
-/* ===== BASE ===== */
+/* BASE */
 
 a {
     text-decoration: none;
@@ -84,7 +84,7 @@ figcaption {
     color: #928374;
 }
 
-/* ===== HEADER ===== */
+/* HEADER */
 
 main {
     max-width: 700px;
@@ -123,7 +123,7 @@ header h2 {
     white-space: nowrap;
 }
 
-/* ===== NAVIGATION ===== */
+/* NAVIGATION */
 
 nav {
     display: inline-block;
@@ -160,7 +160,7 @@ nav a:active {
     color: #928374;
 }
 
-/* ===== CONTENU PRINCIPAL ===== */
+/* CONTENU PRINCIPAL */
 
 main {
     margin: 0 auto;
@@ -169,7 +169,7 @@ main {
     border-radius: 12px;
 }
 
-/* ===== FOOTER ===== */
+/* FOOTER */
 
 footer {
     background-color: #111620;
@@ -279,7 +279,7 @@ a img.external-icon {
     height: 12px !important;
 }
 
-/* ===== PAGE ACCUEIL — HERO ===== */
+/* PAGE ACCUEIL - HERO */
 
 .hero {
     display: flex;
@@ -361,7 +361,7 @@ a img.external-icon {
     transform: scaleX(1.1);
 }
 
-/* ===== PAGE ACCUEIL — CARTE ===== */
+/* PAGE ACCUEIL - CARTE */
 
 #carte {
     width: 100vw;
@@ -378,7 +378,7 @@ a img.external-icon {
     margin: 0 auto;
 }
 
-/* ===== PAGE ACCUEIL — ÉQUIPE ===== */
+/* PAGE ACCUEIL - ÉQUIPE */
 
 main > .equipe h3 {
     position: relative;
@@ -455,7 +455,7 @@ main > .equipe > h3::before {
     font-style: italic;
 }
 
-/* ===== PAGE RÉSULTATS — DÉPARTEMENTS ===== */
+/* PAGE RÉSULTATS - DÉPARTEMENTS */
 
 .dep-buttons {
     display: flex;
@@ -499,7 +499,7 @@ main > .equipe > h3::before {
     text-align: center;
 }
 
-/* ===== PAGE RÉSULTATS — STATIONS ===== */
+/* PAGE RÉSULTATS - STATIONS */
 
 .derniere-visite {
     background: #1c2b3a;
@@ -601,7 +601,7 @@ main > .equipe > h3::before {
     margin-top: .15rem;
 }
 
-/* ===== PAGE STATISTIQUES ===== */
+/* PAGE STATISTIQUES */
 
 .stats-total {
     display: flex;
@@ -685,7 +685,7 @@ main > .equipe > h3::before {
     white-space: nowrap;
 }
 
-/* ===== PAGE TECH — GHIBLI ===== */
+/* PAGE TECH - GHIBLI */
 
 .ghibli {
     max-width: 800px;
@@ -725,7 +725,7 @@ main > .equipe > h3::before {
     margin-top: 20px;
 }
 
-/* ===== PAGE TECH — GÉOLOCALISATION ===== */
+/* PAGE TECH - GÉOLOCALISATION */
 
 .geo {
     background-color: #32302f;
