@@ -86,16 +86,23 @@ $max_stations = 15;
     </h3>
  
     <div class="stations-liste">
-    <?php foreach (array_slice($stations, 0, $max_stations) as $s) : ?>
+    <?php $compteur = 0; foreach ($stations as $s) :
+        if ($compteur >= $max_stations) 
+            break;
+        $compteur++;
+    ?>
         <article class="station-card">
             <div class="station-header">
                 <h4><?= htmlspecialchars($s['adresse']) ?></h4>
                 <span class="station-ville"><?= htmlspecialchars($s['ville']) ?></span>
+
                 <?php if ($s['automate']) : ?>
                     <span class="badge automate">24h/24</span>
                 <?php endif ?>
+
             </div>
             <div class="prix-grille">
+                
             <?php foreach ($s['prix'] as $type => $valeur) :
                 $highlight = ($carburant === $type) ? ' prix-highlight' : '';
             ?>
@@ -104,6 +111,7 @@ $max_stations = 15;
                     <span class="prix-valeur"><?= number_format($valeur, 3, ',', '') ?> €/L</span>
                 </div>
             <?php endforeach ?>
+
             </div>
         </article>
     <?php endforeach ?>
@@ -115,6 +123,7 @@ $max_stations = 15;
             Pour une ville précise, utilisez la <a href="index.php">recherche classique</a>.
         </p>
     <?php endif ?>
+
 </section>
  
 <?php elseif ($erreur !== '') : ?>
