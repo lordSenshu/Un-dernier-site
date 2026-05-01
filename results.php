@@ -31,7 +31,7 @@ if (isset($_COOKIE[$cookie_ville])) {
 
 if ($ville !== '' && $code_dep !== '') {
     $stations = getStations($ville, $code_dep, $carburant);
-    
+
     logVille($ville, $code_dep, $carburant);
 
     $cookie_data = json_encode([
@@ -51,10 +51,10 @@ if ($ville !== '' && $code_dep !== '') {
 <?php if ($derniere_ville && $ville === '') : ?>
 <section class="derniere-visite">
     <p>
-        🕐 Dernière recherche : <strong><?= htmlspecialchars($derniere_ville['ville']) ?></strong>
-        (<?= htmlspecialchars($derniere_ville['date'] ?? '') ?>) —
-        <a href="results.php?region=<?= urlencode($derniere_ville['region'] ?? '') ?>&dep=<?= urlencode($derniere_ville['dep'] ?? '') ?>&ville=<?= urlencode($derniere_ville['ville']) ?>&carburant=<?= urlencode($derniere_ville['carburant'] ?? '') ?>">
-            Relancer cette recherche
+        Dernière recherche : <strong><?= htmlspecialchars($derniere_ville['ville']) ?></strong>
+        (<?= htmlspecialchars($derniere_ville['date'] ?? '') ?>)
+        - <a href="results.php?region=<?= urlencode($derniere_ville['region'] ?? '') ?>&dep=<?= urlencode($derniere_ville['dep'] ?? '') ?>&ville=<?= urlencode($derniere_ville['ville']) ?>&carburant=<?= urlencode($derniere_ville['carburant'] ?? '') ?>">
+            Relancer la recherche
         </a>
     </p>
 </section>
@@ -119,7 +119,7 @@ if ($ville !== '' && $code_dep !== '') {
 
 <?php elseif ($ville !== '' && empty($stations)) : ?>
     <p class="aucun-resultat">Aucune station trouvée pour <strong><?= htmlspecialchars($ville) ?></strong>
-    <?= ($carburant !== '') ? '— carburant : ' . htmlspecialchars($carburant) : '' ?>.
+    <?= ($carburant !== '') ? '(carburant : ' . htmlspecialchars($carburant) . ')' : '' ?>.
     Essayez sans filtre ou vérifiez la ville.</p>
 
 <?php elseif (!empty($stations)) : ?>
@@ -128,7 +128,7 @@ if ($ville !== '' && $code_dep !== '') {
             <?= count($stations) ?> station<?= count($stations) > 1 ? 's' : '' ?>
             trouvée<?= count($stations) > 1 ? 's' : '' ?>
             à <strong><?= htmlspecialchars($ville) ?></strong>
-            <?= ($carburant !== '') ? '— <strong>' . htmlspecialchars($carburant) . '</strong>' : '' ?>
+            <?= ($carburant !== '') ? '· <strong>' . htmlspecialchars($carburant) . '</strong>' : '' ?>
         </h3>
 
         <div class="stations-liste">

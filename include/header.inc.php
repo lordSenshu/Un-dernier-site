@@ -20,6 +20,7 @@ if (isset($_GET["theme"])) {
 }
 
 $style = ($theme === "nuit") ? "/style/darkcss.css" : "/style/newcss.css";
+$logo  = ($theme === "nuit") ? "images/logofull_darkmode.png" : "images/logofull.png";
 ?>
 
 <!DOCTYPE HTML>
@@ -37,15 +38,15 @@ $style = ($theme === "nuit") ? "/style/darkcss.css" : "/style/newcss.css";
 <header>
     <h2 class="titre">
         <a href="index.php">
-            <img src="images/logofull.png" alt="Logo du site">
+            <img src="<?= $logo ?>" alt="Logo du site">
         </a>
     </h2>
 
     <nav aria-label="Navigation principale">
         <ul>
-            <li><a href="index.php">Page d'accueil</a></li>
+            <li><a href="index.php">Accueil</a></li>
             <li><a href="results.php">Prix carburant</a></li>
-            <li><a href="stats.php">Statistiques</a></li>
+            <li><a href="proximite.php">Près de moi</a></li>
         </ul>
     </nav>
 

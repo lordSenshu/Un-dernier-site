@@ -86,7 +86,7 @@ figcaption {
 
 /* ===== HEADER ===== */
 
-header, main {
+main {
     max-width: 700px;
     margin-left: auto;
     margin-right: auto;
@@ -97,6 +97,7 @@ header {
     display: flex;
     align-items: center;
     padding: 20px;
+    max-width: 800px;
     margin: 20px auto;
     border-radius: 8px;
     background-color: #ffffff;
@@ -164,7 +165,8 @@ nav a:active {
 main {
     margin: 0 auto;
     padding: 3em 5em 1.5em 5em;
-    background-color: #f2f1ed;
+    background-color: #f5ead8;
+    border-radius: 12px;
 }
 
 /* ===== FOOTER ===== */
@@ -281,33 +283,38 @@ a img.external-icon {
 
 .hero {
     display: flex;
-    flex-flow: row nowrap;
     align-items: center;
-    justify-content: space-evenly;
+    justify-content: center;
     margin: 0 auto;
     max-width: 550px;
     background-color: rgba(250, 189, 46, 0.10);
     border-top: 1px solid rgba(250, 189, 46, 0.12);
     border-bottom: 1px solid rgba(250, 189, 46, 0.12);
     border-radius: 15px;
-    height: 18em;
-    padding: 3em;
+    height: 6em;
+    padding: 1.5em;
+    box-sizing: border-box;
+}
+
+.hero aside {
+    width: 100%;
+    text-align: center;
+    margin: 0;
+    padding: 0;
 }
 
 .hero h1,
 .hero p {
-    width: 100%;
+    color: #4d4338;
+    font-size: 22pt;
     text-align: center;
+    margin: 0;
+    width: 100%;
 }
 
 .hero h1 {
     color: rgb(214, 153, 25);
     font-size: 28pt;
-}
-
-.hero p {
-    color: #4d4338;
-    font-size: 16pt;
 }
 
 .hero > * {
@@ -661,6 +668,7 @@ main > .equipe > h3::before {
 
 .barre {
     height: 28px;
+    width: var(--pct);
     background: #2c7be5;
     border-radius: 0 4px 4px 0;
     min-width: 4px;
@@ -680,7 +688,7 @@ main > .equipe > h3::before {
 /* ===== PAGE TECH — GHIBLI ===== */
 
 .ghibli {
-    max-width: 900px;
+    max-width: 800px;
     margin: 40px auto;
     text-align: center;
 }
@@ -756,4 +764,15 @@ main > .equipe > h3::before {
 .geo .label {
     text-align: right;
     color: #bc5a12;
+}
+
+.notice {
+    font-style: italic;
+    color: #6b7a8d;
+    margin-top: .5rem;
+}
+
+.erreur {
+    color: #c0392b;
+    font-weight: bold;
 }

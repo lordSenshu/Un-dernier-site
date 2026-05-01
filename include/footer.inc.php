@@ -2,7 +2,7 @@
     <div class="footer-top">
         <section class="footer-links">
             <a href="index.php" class="footer-logo-link">
-                <img src="images/logofull.png" alt="Logo du site" class="footer-logo">
+                <img src="<?= $logo ?>" alt="Logo du site" class="footer-logo">
             </a>
         </section>
 
@@ -21,8 +21,7 @@
     <div class="footer-bottom">
         <a href="sitemap.php">Plan du site</a>
         <a href="tech.php">Tech</a>
-        <a href="#">PLACEHOLDER</a>
-        <a href="#">PLACEHOLDER</a>
+        <a href="stats.php">Statistiques</a>
     </div>
 
     <div class="footer-legal">

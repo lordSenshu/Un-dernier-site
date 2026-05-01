@@ -38,7 +38,7 @@ $max_consulte = !empty($top_villes) ? max($top_villes) : 1;
                 <span class="barre-label"><?= htmlspecialchars($ville) ?></span>
                 <div class="barre-conteneur">
                     <div class="barre <?= $podium ?>"
-                         style="width: <?= $pourcent ?>%"
+                         style="--pct:<?= $pourcent ?>%"
                          role="progressbar"
                          aria-valuenow="<?= $nb ?>"
                          aria-valuemin="0"

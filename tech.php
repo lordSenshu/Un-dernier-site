@@ -18,7 +18,7 @@ if ($response === false) {
 ?>
         <section class="ghibli">
             <h1><?= htmlspecialchars($data["title"]) ?></h1>
-            <h2><?= htmlspecialchars($data["original_title"]) ?></h2>
+            <h2 lang="ja"><?= htmlspecialchars($data["original_title"]) ?></h2>
 
             <p><strong>Année de sortie :</strong> <?= htmlspecialchars($data["release_date"]) ?></p>
 
@@ -58,7 +58,7 @@ if ($response === false) {
             <p><strong>Ville :</strong> <?= htmlspecialchars($geo_data['city'] ?? "Inconnu") ?></p>
             <p><strong>Localisation :</strong> <?= htmlspecialchars($geo_data['loc'] ?? "Inconnu") ?></p>
         <?php else: ?>
-            <p style="color: red;">Impossible de déterminer votre position géographique.</p>
+            <p class="erreur">Impossible de déterminer votre position géographique.</p>
         <?php endif; ?>
     </section>
 

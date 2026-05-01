@@ -1,0 +1,2 @@
+2026-04-30 23:17:53 No Placemarks found. XML head: <?xml version='1.0' encoding='utf-8'?>
+<kml><Document><Schema name="prix-des-carburants-en-france-flux-instantane-v2" id="prix-des-carburants-en-france-flux-instantane-v2"><SimpleField type="int" name="id"><displayName>id</displayName></SimpleField><SimpleField type="string" name="latitude"><displayName>latitude</displayName></SimpleField><SimpleField type="string" name="longitude"><displayName>longitude</displayName></SimpleField><SimpleField type="string" name="cp"><displayName>Code postal</di

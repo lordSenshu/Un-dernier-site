@@ -271,4 +271,130 @@
         $lines = file($fichier, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
         return max(0, count($lines) - 1);
     }
+
+        /**
+     * Retourne la géolocalisation approximative de l'utilisateur via ipinfo.io.
+     *
+     * @return array Tableau avec les clés 'ip', 'city', 'region', 'country', 'postal', 'loc'.
+     *               Tableau vide si l'appel échoue.
+     */
+    function getGeoFromIP(): array {
+        $ip = $_SERVER['HTTP_X_FORWARDED_FOR'] ?? $_SERVER['REMOTE_ADDR'] ?? '';
+        if ($ip === '127.0.0.1' || $ip === '::1' || $ip === '') {
+            $ip = '193.54.115.192'; // fallback CY Cergy en local
+        }
+        $json = httpGet("https://ipinfo.io/{$ip}/geo");
+        if (!$json) return [];
+        return json_decode($json, true) ?? [];
+    }
+
+    /**
+     * Déduit le code département depuis un code postal français.
+     *
+     * Gère les cas particuliers : Corse (2A/2B) et DOM (971-976).
+     *
+     * @param string $postal Code postal (ex. "76600", "20000", "97100").
+     * @return string         Code département (ex. "76", "2A", "971") ou "" si invalide.
+     */
+    function codeDepDepuisPostal(string $postal): string {
+        $postal = trim($postal);
+        if (strlen($postal) < 2) return '';
+
+        $debut3 = substr($postal, 0, 3);
+        if (in_array($debut3, ['971', '972', '973', '974', '976'], true)) {
+            return $debut3;
+        }
+
+        $debut2 = substr($postal, 0, 2);
+        if ($debut2 === '20') {
+            return '2A'; // on ne peut pas distinguer 2A/2B depuis le CP seul
+        }
+
+        return $debut2;
+    }
+
+    /**
+     * Récupère les stations d'un département via le flux XML de l'API gouvernementale
+     * (data.economie.gouv.fr), parsé avec SimpleXML.
+     *
+     * Illustre l'exploitation du format XML en complément des appels JSON de getStations().
+     *
+     * @param string $code_dep  Code du département (ex. "76", "2A").
+     * @param int    $limit     Nombre maximum de stations à récupérer (défaut 50).
+     * @param string $carburant Filtre optionnel (ex. "SP95", "Gazole"). Vide = tous.
+     * @return array            Stations triées par prix croissant,
+     *                          chacune avec 'adresse', 'ville', 'automate', 'prix'.
+     */
+    function getStationsParDepXML(string $code_dep, int $limit = 50, string $carburant = ''): array {
+        $url = 'https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/'
+            . 'prix-des-carburants-en-france-flux-instantane-v2/exports/kml'
+            . '?where=' . rawurlencode('code_departement="' . $code_dep . '"')
+            . '&limit=' . $limit;
+
+        $xml_raw = httpGet($url);
+        if (!$xml_raw) return [];
+
+        // Retire le namespace KML pour simplifier le parsing SimpleXML
+        $xml_raw = str_replace(' xmlns="http://www.opengis.net/kml/2.2"', '', $xml_raw);
+
+        libxml_use_internal_errors(true);
+        $xml = simplexml_load_string($xml_raw);
+        if ($xml === false) {
+            file_put_contents(
+                ROOT . '/data/xml_debug.log',
+                date('Y-m-d H:i:s') . " simplexml_load_string failed\n" . substr($xml_raw, 0, 500) . "\n",
+                FILE_APPEND
+            );
+            return [];
+        }
+
+        // Structure KML : kml > Document > Placemark[] (sans Folder intermédiaire)
+        $placemarks = $xml->Document->Placemark ?? null;
+        if ($placemarks === null || count($placemarks) === 0) {
+            file_put_contents(
+                ROOT . '/data/xml_debug.log',
+                date('Y-m-d H:i:s') . " No Placemarks found. XML head: " . substr($xml_raw, 0, 500) . "\n",
+                FILE_APPEND
+            );
+            return [];
+        }
+
+        $stations = [];
+        foreach ($placemarks as $placemark) {
+            // Chaque Placemark > ExtendedData > SchemaData > SimpleData[@name]
+            $data = [];
+            foreach ($placemark->ExtendedData->SchemaData->SimpleData as $sd) {
+                $name        = (string)($sd->attributes()['name'] ?? '');
+                $data[$name] = (string)$sd;
+            }
+
+            $adresse = trim($data['adresse'] ?? '');
+            $ville   = trim($data['ville']   ?? '');
+
+            $prix = [];
+            if (!empty($data['sp95_prix']))   $prix['SP95']   = (float)$data['sp95_prix'];
+            if (!empty($data['sp98_prix']))   $prix['SP98']   = (float)$data['sp98_prix'];
+            if (!empty($data['gazole_prix'])) $prix['Gazole'] = (float)$data['gazole_prix'];
+            if (!empty($data['e10_prix']))    $prix['E10']    = (float)$data['e10_prix'];
+            if (!empty($data['gplc_prix']))   $prix['GPL']    = (float)$data['gplc_prix'];
+            if (!empty($data['e85_prix']))    $prix['E85']    = (float)$data['e85_prix'];
+
+            if ($carburant !== '' && !isset($prix[$carburant])) continue;
+            if (empty($prix)) continue;
+
+            $stations[] = [
+                'adresse'  => $adresse,
+                'ville'    => $ville,
+                'automate' => ($data['horaires_automate_24_24'] ?? '') === 'Oui',
+                'prix'     => $prix,
+            ];
+        }
+
+        $cle_tri = ($carburant !== '') ? $carburant : 'Gazole';
+        usort($stations, static fn($a, $b) =>
+            ($a['prix'][$cle_tri] ?? PHP_INT_MAX) <=> ($b['prix'][$cle_tri] ?? PHP_INT_MAX)
+        );
+
+        return $stations;
+    }
 ?>
