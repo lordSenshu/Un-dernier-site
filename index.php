@@ -5,14 +5,14 @@ require "include/functions.inc.php";
 $title = "EcoPlein";
 require_once "include/header.inc.php";
 ?>
+<main>
 <section class="hero">
     <aside>
         <p>Trouvez le carburant au meilleur prix, sans tourner en rond.</p>
     </aside>
 </section>
-<main>
+    <h2>Sélectionnez votre région</h2>
    <section id="carte">
-        <h2>Sélectionnez votre région</h2>
         <figure>
             <img src="images/regions.webp" usemap="#carte-regions" alt="Carte interactive des régions de france métropolitaine" id="carte-img" width="<?= $largeur_affichage ?>" />
             <figcaption>Carte des régions de France</figcaption>
@@ -42,7 +42,7 @@ require_once "include/header.inc.php";
             <div class="author-content">
                 <p class="author-name">SADLI Agnies</p>
                 <p class="author-role">Développeuse</p>
-                <p class="author-bio">""</p>
+                <p class="author-bio">"La vitamine C, mais elle ne dira rien."</p>
             </div>
         </section>
 
