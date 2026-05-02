@@ -1,12 +1,39 @@
 <?php
+/**
+ * @file functions.inc.php
+ * @brief Fonctions principales du site EcoPlein.
+ *
+ * Ce fichier regroupe toutes les fonctions PHP utilisées par les pages du site :
+ * 
+ * lecture des données géographiques (CSV), 
+ * appels aux API gouvernementales des prix des carburants (JSON et XML/KML), géolocalisation IP,
+ * gestion des statistiques côté serveur (CSV) et utilitaires divers.
+ *
+ * @author SADLI Agnies
+ * @author L'HONORÉ Eliott
+ * @date 2026
+ */
+ 
 declare(strict_types=1);
  
 define('ROOT', dirname(__DIR__));
  
+/** @var int Largeur originale de l'image de la carte des régions en pixels. */
 $largeur_originale = 712;
+ 
+/** @var int Largeur d'affichage cible de la carte en pixels. */
 $largeur_affichage = 500;
+ 
+/** @var float Ratio appliqué aux coordonnées des zones cliquables. */
 $ratio = $largeur_affichage / $largeur_originale;
  
+/**
+ * @brief Met à l'échelle les coordonnées d'une zone cliquable HTML.
+ *
+ * @param string $coords
+ * @param float $ratio Facteur d'échelle à appliquer à chaque valeur.
+ * @return string Coordonnées mises à l'échelle
+ */
 function scaleCoords(string $coords, float $ratio): string {
     $points = explode(',', $coords);
     $result = [];
@@ -16,6 +43,14 @@ function scaleCoords(string $coords, float $ratio): string {
     return implode(',', $result);
 }
  
+/**
+ * @var array $regions Liste des régions françaises métropolitaines avec leurs codes INSEE et les coordonnées polygonales pour la carte interactive.
+ *
+ * Chaque entrée est un tableau associatif contenant :
+ * - code INSEE de la région
+ * - nom de la région
+ * - coordonnées du polygone cliquable (non mises à l'échelle)
+ */
 $regions = [
     ['code' => '94', 'nom' => 'Corse',
      'coords' => '654,638,696,598,701,680,692,719,669,712,654,667'],
@@ -45,66 +80,99 @@ $regions = [
      'coords' => '467,370,413,342,393,394,366,478,401,482,437,481,465,502,513,533,551,518,579,490,597,474,627,453,633,429,626,396,617,365'],
 ];
  
+/**
+ * @brief Charge les départements d'une région depuis le fichier CSV INSEE.
+ *
+ * @param string $code_region
+ * @return array Tableau associatif [code_departement => nom_departement].
+ */
 function getDepartements(string $code_region): array {
     $departements = [];
     $fichier = fopen(ROOT . '/data/v_departement_2024.csv', 'r');
     fgetcsv($fichier, 0, ',', '"', '\\');
+ 
     while (($ligne = fgetcsv($fichier, 0, ',', '"', '\\')) !== false) {
+ 
         if (!isset($ligne[0], $ligne[1], $ligne[5]))
             continue;
+ 
         $code_dep = trim($ligne[0] ?? '', '"');
         $code_reg = trim($ligne[1] ?? '', '"');
         $nom = trim($ligne[5] ?? '', '"');
+ 
         if ($code_reg === $code_region) {
             $departements[$code_dep] = $nom;
         }
     }
     fclose($fichier);
+ 
     return $departements;
 }
  
+/**
+ * @brief Charge les communes d'un département depuis le fichier CSV INSEE.
+ *
+ * Les noms de communes sont convertis de ISO-8859-1 vers UTF-8.
+ *
+ * @param string $code_dep
+ * @return array Tableau associatif [code_postal => nom_commune].
+ */
 function getCommunes(string $code_dep): array {
     $communes = [];
     $fichier = fopen(ROOT . '/data/communes.csv', 'r');
     fgetcsv($fichier, 0, ';', '"', '\\');
+ 
     while (($ligne = fgetcsv($fichier, 0, ';', '"', '\\')) !== false) {
+ 
         if (!isset($ligne[0], $ligne[2], $ligne[3]))
             continue;
+ 
         $code_postal = trim($ligne[2] ?? '');
         $nom = trim($ligne[3] ?? '');
+ 
         if ($nom === '')
             continue;
+ 
         $nom = mb_convert_encoding($nom, 'UTF-8', 'ISO-8859-1');
         $dep = substr(trim($ligne[0] ?? ''), 0, 2);
+ 
         if ($dep === $code_dep) {
             $communes[$code_postal] = $nom;
         }
     }
     fclose($fichier);
+ 
     return $communes;
 }
  
 /**
- * Retourne les stations d'une ville via l'API gouvernementale des carburants
+ * @brief Retourne les stations d'une ville via l'API gouvernementale
+ *
+ * Interroge l'API pour récupérer les stations-service d'une ville donnée. 
+ * La comparaison des noms est insensible via strtr(). 
+ * Les résultats sont triés avec un tri à bulles.
+ *
  * @param string $ville
  * @param string $code_dep
- * @param string $carburant filtre optionnel (SP95, SP98, Gazole, E10, GPL, E85)
- * @return array stations triées par prix croissant
+ * @param string $carburant
+ * @return array Tableau de stations, chacune contenant :
+ *               - adresse (string)
+ *               - ville (string)
+ *               - automate (bool) TRUE si ouvert h24
+ *               - prix (array
+ *               - maj (array)
  */
 function getStations(string $ville, string $code_dep, string $carburant = ''): array {
-
+ 
     $vn = strtoupper(strtr($ville, [
         'à'=>'a','â'=>'a','ä'=>'a','é'=>'e','è'=>'e','ê'=>'e','ë'=>'e',
         'î'=>'i','ï'=>'i','ô'=>'o','ö'=>'o','ù'=>'u','û'=>'u','ü'=>'u','ç'=>'c',
         'À'=>'A','Â'=>'A','Ä'=>'A','É'=>'E','È'=>'E','Ê'=>'E','Ë'=>'E',
         'Î'=>'I','Ï'=>'I','Ô'=>'O','Ö'=>'O','Ù'=>'U','Û'=>'U','Ü'=>'U','Ç'=>'C',
         '-'=>' ','\''=>' ',
-    ])); 
-
-    $url_base = 'https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/'
-        . 'prix-des-carburants-en-france-flux-instantane-v2/records'
-        . '?where=' . urlencode('code_departement="' . $code_dep . '"')
-        . '&limit=100';
+    ]));
+ 
+    $url_base = 'https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/prix-des-carburants-en-france-flux-instantane-v2/records?where=' . urlencode('code_departement="' . $code_dep . '"') . '&limit=100';
  
     $reponse = @file_get_contents($url_base . '&offset=0');
     if (!$reponse)
@@ -120,11 +188,15 @@ function getStations(string $ville, string $code_dep, string $carburant = ''): a
  
     while ($offset < $total) {
         $reponse = @file_get_contents($url_base . '&offset=' . $offset);
+ 
         if (!$reponse)
             break;
+ 
         $page = json_decode($reponse, true);
+ 
         if (empty($page['results']))
             break;
+ 
         foreach ($page['results'] as $r) {
             $result[] = $r;
         }
@@ -140,6 +212,7 @@ function getStations(string $ville, string $code_dep, string $carburant = ''): a
             'Î'=>'I','Ï'=>'I','Ô'=>'O','Ö'=>'O','Ù'=>'U','Û'=>'U','Ü'=>'U','Ç'=>'C',
             '-'=>' ','\''=>' ',
         ]));
+ 
         if ($v_api !== $vn)
             continue;
  
@@ -153,6 +226,7 @@ function getStations(string $ville, string $code_dep, string $carburant = ''): a
  
         if ($carburant !== '' && !isset($prix[$carburant]))
             continue;
+ 
         if (empty($prix))
             continue;
  
@@ -188,11 +262,25 @@ function getStations(string $ville, string $code_dep, string $carburant = ''): a
     return $stations;
 }
  
+/**
+ * @brief Enregistre une consultation dans le fichier CSV des statistiques.
+ *
+ * Ajoute une ligne dans le fichier consultations.csv.
+ * Crée le fichier avec son en-tête si il n'existe pas encore.
+ * Les virgules dans le nom de ville sont remplacées par des espaces pour ne pas corrompre le format CSV.
+ *
+ * @param string $ville 
+ * @param string $code_dep
+ * @param string $carburant 
+ * @return void
+ */
 function logVille(string $ville, string $code_dep, string $carburant = ''): void {
     $fichier = ROOT . '/data/consultations.csv';
+ 
     if (!file_exists($fichier)) {
         file_put_contents($fichier, "horodatage,ville,code_departement,carburant\n", LOCK_EX);
     }
+ 
     $horodatage = date('Y-m-d H:i:s');
     $ligne = sprintf("%s,%s,%s,%s\n",
         $horodatage,
@@ -203,23 +291,40 @@ function logVille(string $ville, string $code_dep, string $carburant = ''): void
     file_put_contents($fichier, $ligne, FILE_APPEND | LOCK_EX);
 }
  
+/**
+ * @brief Retourne les villes les plus consultées d'après le fichier CSV.
+ *
+ * Lit consultations.csv, compte les occurrences de chaque ville,
+ * trie le résultat via un tri à bulles
+ * retourne les N premières entrées.
+ *
+ * @param int $top Nombre max de villes à retourner
+ * @return array Tableau trié décroissant.
+ */
 function getTopVilles(int $top = 10): array {
     $fichier = ROOT . '/data/consultations.csv';
+ 
     if (!file_exists($fichier))
         return [];
+ 
     $fp = fopen($fichier, 'r');
     fgetcsv($fp); // en-tête
     $compteur = [];
+ 
     while (($ligne = fgetcsv($fp)) !== false) {
+ 
         if (!isset($ligne[1]))
             continue;
+ 
         $ville = trim($ligne[1]);
+ 
         if ($ville === '')
             continue;
+ 
         $compteur[$ville] = ($compteur[$ville] ?? 0) + 1;
     }
     fclose($fp);
-
+ 
     // tri décroissant
     $nb = count($compteur);
     $cles = array_keys($compteur);
@@ -232,31 +337,47 @@ function getTopVilles(int $top = 10): array {
             }
         }
     }
-
+ 
     $result = [];
     for ($i = 0; $i < $top && $i < $nb; $i++) {
         $result[$cles[$i]] = $compteur[$cles[$i]];
     }
+ 
     return $result;
 }
  
+/**
+ * @brief Retourne le nombre total de consultations enregistrées.
+ *
+ * @return int
+ */
 function getTotalConsultations(): int {
     $fichier = ROOT . '/data/consultations.csv';
     if (!file_exists($fichier))
         return 0;
+ 
     $fp = fopen($fichier, 'r');
     $total = -1; // en-tête
+ 
     while (fgets($fp) !== false) {
         $total++;
     }
+ 
     fclose($fp);
+ 
     return max(0, $total);
 }
  
+/**
+ * @brief Retourne la géolocalisation approximative de l'utilisateur via ipinfo.io.
+ *
+ * @return array Tableau avec : ip, city, region, country, postal, loc.
+ *               Tableau vide en cas d'échec ou si l'IP est locale.
+ */
 function getGeoFromIP(): array {
     $ip = $_SERVER['HTTP_X_FORWARDED_FOR'] ?? $_SERVER['REMOTE_ADDR'] ?? '';
  
-    //header peut contenir plusieurs IPs
+    // le header peut contenir plusieurs IPs derrière un proxy
     if (strpos($ip, ',') !== false) {
         $ip = trim(explode(',', $ip)[0]);
     }
@@ -268,19 +389,22 @@ function getGeoFromIP(): array {
     $json = @file_get_contents("https://ipinfo.io/{$ip}/geo");
     if (!$json)
         return [];
+ 
     return json_decode($json, true) ?? [];
 }
  
+/**
+ * @brief Déduit le code département depuis un code postal français.
+ *
+ * Gère la Corse (20 -> 2A).
+ *
+ * @param string $postal Code postal
+ * @return string Code du département, vide si invalide.
+ */
 function codeDepDepuisPostal(string $postal): string {
     $postal = trim($postal);
     if (strlen($postal) < 2)
         return '';
- 
-    // DOM
-    $debut3 = substr($postal, 0, 3);
-    if (in_array($debut3, ['971', '972', '973', '974', '976'], true)) {
-        return $debut3;
-    }
  
     // corse
     $debut2 = substr($postal, 0, 2);
@@ -292,15 +416,24 @@ function codeDepDepuisPostal(string $postal): string {
 }
  
 /**
- * Récupère les stations d'un département via le flux KML (XML) de l'API gouvernementale.
- * On parse le XML avec preg_match_all
- * Chaque <Placemark> correspond à une station, les données sont dans des balises <SimpleData>.
+ * @brief Récupère les stations d'un département via le flux KML (XML) de l'API gouvernementale.
+ *
+ * Télécharge le flux KML (format XML) depuis data.economie.gouv.fr
+ * extrait les informations de chaque station avec preg_match_all sur les balises : Placemark (une par station) et SimpleData (champs de données).
+ * Les résultats sont triés par prix croissant via un tri à bulles.
+ *
+ * @param string $code_dep
+ * @param int    $limit
+ * @param string $carburant Type de carburant à filtrer (SP95, SP98, Gazole, E10, GPL, E85).
+ *                          Chaîne vide pour tous les carburants.
+ * @return array Tableau de stations avec :
+ *               - adresse (string)
+ *               - ville (string)
+ *               - automate (bool) TRUE si ouvert 24h/24
+ *               - prix (array)
  */
 function getStationsParDepXML(string $code_dep, int $limit = 50, string $carburant = ''): array {
-    $url = 'https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/'
-        . 'prix-des-carburants-en-france-flux-instantane-v2/exports/kml'
-        . '?where=' . urlencode('code_departement="' . $code_dep . '"')
-        . '&limit=' . $limit;
+    $url = 'https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/prix-des-carburants-en-france-flux-instantane-v2/exports/kml?where=' . urlencode('code_departement="' . $code_dep . '"') . '&limit=' . $limit;
  
     $xml_raw = @file_get_contents($url);
     if (!$xml_raw) return [];
@@ -309,7 +442,7 @@ function getStationsParDepXML(string $code_dep, int $limit = 50, string $carbura
     preg_match_all('/<Placemark>(.*?)<\/Placemark>/s', $xml_raw, $blocs);
  
     foreach ($blocs[1] as $bloc) {
-
+ 
         preg_match('/<SimpleData name="sp95_prix">(.*?)<\/SimpleData>/s', $bloc, $m); $v_sp95 = trim($m[1] ?? '');
         preg_match('/<SimpleData name="sp98_prix">(.*?)<\/SimpleData>/s', $bloc, $m); $v_sp98 = trim($m[1] ?? '');
         preg_match('/<SimpleData name="gazole_prix">(.*?)<\/SimpleData>/s', $bloc, $m); $v_gaz = trim($m[1] ?? '');
@@ -319,7 +452,7 @@ function getStationsParDepXML(string $code_dep, int $limit = 50, string $carbura
         preg_match('/<SimpleData name="adresse">(.*?)<\/SimpleData>/s', $bloc, $m); $v_adr = trim($m[1] ?? '');
         preg_match('/<SimpleData name="ville">(.*?)<\/SimpleData>/s', $bloc, $m); $v_ville = trim($m[1] ?? '');
         preg_match('/<SimpleData name="horaires_automate_24_24">(.*?)<\/SimpleData>/s', $bloc, $m); $v_auto = trim($m[1] ?? '');
-
+ 
         $prix = [];
         if ($v_sp95 !== '') $prix['SP95'] = (float)$v_sp95;
         if ($v_sp98 !== '') $prix['SP98'] = (float)$v_sp98;
@@ -327,12 +460,13 @@ function getStationsParDepXML(string $code_dep, int $limit = 50, string $carbura
         if ($v_e10 !== '') $prix['E10'] = (float)$v_e10;
         if ($v_gpl !== '') $prix['GPL'] = (float)$v_gpl;
         if ($v_e85 !== '') $prix['E85'] = (float)$v_e85;
-
+ 
         if ($carburant !== '' && !isset($prix[$carburant]))
             continue;
+ 
         if (empty($prix))
             continue;
-
+ 
         $stations[] = [
             'adresse' => $v_adr,
             'ville' => $v_ville,
@@ -344,10 +478,13 @@ function getStationsParDepXML(string $code_dep, int $limit = 50, string $carbura
     // tri à bulles par prix croissant
     $cle_tri = ($carburant !== '') ? $carburant : 'Gazole';
     $nb = count($stations);
+ 
     for ($i = 0; $i < $nb - 1; $i++) {
+ 
         for ($j = 0; $j < $nb - $i - 1; $j++) {
             $pa = $stations[$j]['prix'][$cle_tri] ?? 9999;
             $pb = $stations[$j+1]['prix'][$cle_tri] ?? 9999;
+ 
             if ($pa > $pb) {
                 $tmp = $stations[$j];
                 $stations[$j] = $stations[$j+1];
@@ -358,3 +495,4 @@ function getStationsParDepXML(string $code_dep, int $limit = 50, string $carbura
  
     return $stations;
 }
+ 

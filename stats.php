@@ -27,13 +27,20 @@ $max_consulte = !empty($top_villes) ? max($top_villes) : 1;
     <h3>Top <?= count($top_villes) ?> des villes les plus consultées</h3>
 
     <?php if (empty($top_villes)) : ?>
+
         <p>Aucune donnée pour le moment. Lancez une première recherche !</p>
+
     <?php else : ?>
+
         <div class="histogramme" aria-label="Histogramme des villes les plus consultées">
-        <?php $rang = 1; foreach ($top_villes as $ville => $nb) :
+
+        <?php
+        $rang = 1;
+        foreach ($top_villes as $ville => $nb) :
             $pourcent = round($nb / $max_consulte * 100);
-            $podium   = $rang <= 3 ? 'podium-' . $rang : '';
+            $podium = $rang <= 3 ? 'podium-' . $rang : '';
         ?>
+
             <div class="barre-ligne">
                 <span class="barre-label"><?= htmlspecialchars($ville) ?></span>
                 <div class="barre-conteneur">
@@ -47,9 +54,16 @@ $max_consulte = !empty($top_villes) ? max($top_villes) : 1;
                     <span class="barre-valeur"><?= $nb ?> visite<?= $nb > 1 ? 's' : '' ?></span>
                 </div>
             </div>
-        <?php $rang++; endforeach; ?>
+
+        <?php
+        $rang++;
+        endforeach;
+        ?>
+
         </div>
-    <?php endif; ?>
+
+    <?php endif ?>
+
 </section>
 </main>
 

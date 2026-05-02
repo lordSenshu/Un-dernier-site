@@ -16,6 +16,7 @@ if ($response === false) {
         $index = array_rand($films);
         $data = $films[$index];
 ?>
+
         <section class="ghibli">
             <h1><?= htmlspecialchars($data["title"]) ?></h1>
             <h2 lang="ja"><?= htmlspecialchars($data["original_title"]) ?></h2>
@@ -37,30 +38,32 @@ if ($response === false) {
             <p class="description"><?= htmlspecialchars($data["description"]) ?></p>
         </section>
 
-    <?php
-    $user_ip = $_SERVER["HTTP_X_FORWARDED_FOR"] ?? $_SERVER["REMOTE_ADDR"] ?? '';
+<?php
+        $user_ip = $_SERVER["HTTP_X_FORWARDED_FOR"] ?? $_SERVER["REMOTE_ADDR"] ?? '';
 
-    if ($user_ip === "127.0.0.1" || $user_ip === "::1") {
-        $user_ip = "193.54.115.192";
-    }
+        if ($user_ip === "127.0.0.1" || $user_ip === "::1") {
+            $user_ip = "193.54.115.192";
+        }
 
-    $api_url = "https://ipinfo.io/{$user_ip}/geo";
-    $json_data = @file_get_contents($api_url);
-    $geo_data = json_decode($json_data, true);
-    ?>
+        $api_url = "https://ipinfo.io/{$user_ip}/geo";
+        $json_data = @file_get_contents($api_url);
+        $geo_data = json_decode($json_data, true);
+?>
 
-    <section class="geo">
-        <h2>Position géographique approximative</h2>
-        <?php if ($geo_data && isset($geo_data['city'])): ?>
-            <p><strong>Votre adresse IP :</strong> <?= htmlspecialchars($user_ip) ?></p>
-            <p><strong>Région :</strong> <?= htmlspecialchars($geo_data['region'] ?? "Inconnue") ?></p>
-            <p><strong>Pays :</strong> <?= htmlspecialchars($geo_data['country'] ?? "Inconnu") ?></p>
-            <p><strong>Ville :</strong> <?= htmlspecialchars($geo_data['city'] ?? "Inconnu") ?></p>
-            <p><strong>Localisation :</strong> <?= htmlspecialchars($geo_data['loc'] ?? "Inconnu") ?></p>
-        <?php else: ?>
-            <p class="erreur">Impossible de déterminer votre position géographique.</p>
-        <?php endif; ?>
-    </section>
+        <section class="geo">
+            <h2>Position géographique approximative</h2>
+
+            <?php if ($geo_data && isset($geo_data['city'])) : ?>
+                <p><strong>Votre adresse IP :</strong> <?= htmlspecialchars($user_ip) ?></p>
+                <p><strong>Région :</strong> <?= htmlspecialchars($geo_data['region'] ?? "Inconnue") ?></p>
+                <p><strong>Pays :</strong> <?= htmlspecialchars($geo_data['country'] ?? "Inconnu") ?></p>
+                <p><strong>Ville :</strong> <?= htmlspecialchars($geo_data['city'] ?? "Inconnu") ?></p>
+                <p><strong>Localisation :</strong> <?= htmlspecialchars($geo_data['loc'] ?? "Inconnu") ?></p>
+            <?php else : ?>
+                <p class="erreur">Impossible de déterminer votre position géographique.</p>
+            <?php endif; ?>
+
+        </section>
 
 <?php
     } else {
